@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:auria_ai/utils/all_keys.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +13,14 @@ import '../Onboarding/OnBoardingScreen.dart';
 import '../SignUp/SignUpModel.dart';
 
 class SplashVM {
+
+
+  void firebaseToken() {
+    FirebaseMessaging.instance.getToken().then((value) {
+      token = value.toString();
+      print("FCMTOKEM+++++ $token");
+    });
+  }
 
 
   nextScreen(BuildContext context) {

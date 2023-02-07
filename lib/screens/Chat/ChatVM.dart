@@ -3,6 +3,8 @@ import 'package:auria_ai/screens/Chat/ChatModel.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 
+import '../Home/HomeScreen.dart';
+
 class ChatVM with ChangeNotifier{
 
   TextEditingController messageController = TextEditingController();
@@ -16,7 +18,7 @@ class ChatVM with ChangeNotifier{
   ];
 
   void backClick(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
   }
 
 }

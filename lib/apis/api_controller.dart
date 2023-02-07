@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/Login/LoginScreen.dart';
+import '../screens/Welcome/WelcomeScreen.dart';
 import '../utils/all_keys.dart';
 
 String key_splite = "_*_";
@@ -11,6 +12,8 @@ String baseUrl = 'http://3.227.175.32:5544/apis/';
 String password = 'QXVyaWEgQXBwIENyZWF0ZWQgQnkgQ2hhbmRhbg';
 
 SignUpModel signUpModel = SignUpModel();
+
+var token = "qwe";
 
 //---------------------------------Post Method----------------------------------
 
@@ -68,7 +71,7 @@ Future<String> methodWithHeader(String method, String url, Map<String, String>? 
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => LoginScreen(),
+        builder: (BuildContext context) => WelcomeScreen(),
       ),
       (route) => false,
     );
@@ -103,7 +106,7 @@ Future<String> getMethodWithQuery(String method, String endUrl, Map<String, Stri
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => LoginScreen(),
+        builder: (BuildContext context) => WelcomeScreen(),
       ),
       (route) => false,
     );

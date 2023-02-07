@@ -4,12 +4,14 @@ import 'package:auria_ai/utils/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../Home/HomeScreen.dart';
+
 class SubscriptionVM with ChangeNotifier{
 
   var checkPlan = 0;
 
   void backClick(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
   }
 
   void plansClick(int i) {
@@ -23,6 +25,5 @@ class SubscriptionVM with ChangeNotifier{
       Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
     }
   }
-
 
 }

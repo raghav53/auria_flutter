@@ -5,6 +5,7 @@ class AllKeys{
 
   static var signup = "signup";
   static var login = "login";
+  static var socialLogin = "social-login";
   static var logout = "logout";
   static var forgotPassword = "forgot_password";
   static var getProfile = "get-profile";

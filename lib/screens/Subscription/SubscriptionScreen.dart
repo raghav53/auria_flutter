@@ -19,53 +19,50 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        title: Common.mediumText(Strings.subscription,20,AppColor.whiteColor,TextAlign.start),
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(image: AssetImage("assets/images/background_img.png"), fit: BoxFit.cover),
+      ),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            vm.backClick(context);
-          },
-        ),
-      ),
-
-      body: Stack(
-        children: [
-          backgroundImage(context),
-          Container(
-            margin: const EdgeInsets.only(top: 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10,right: 20),
-                  child: Common.boldText(Strings.unlockUnlimitedAccess, 30, AppColor.whiteColor,TextAlign.start),
-                ),
-                const SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Common.commonText(Strings.toYourAiAssistant, 20, AppColor.whiteColor,TextAlign.start),
-                ),
-                subscriptionList()
-              ],
-            ),
+        appBar: AppBar(
+          elevation: 0.0,
+          centerTitle: true,
+          title: Common.mediumText(Strings.subscription,20,AppColor.whiteColor,TextAlign.start),
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              vm.backClick(context);
+            },
           ),
-        ],
-      ),
+        ),
 
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10,right: 20),
+              child: Common.boldText(Strings.unlockUnlimitedAccess, 30, AppColor.whiteColor,TextAlign.start),
+            ),
+            const SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Common.commonText(Strings.toYourAiAssistant, 20, AppColor.whiteColor,TextAlign.start),
+            ),
+            Flexible(child: subscriptionList())
+          ],
+        ),
+
+      ),
     );
   }
 
   Widget subscriptionList() {
     return  Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height*0.66,
       margin: const EdgeInsets.only(top: 24),
       decoration: BoxDecoration(
         color: AppColor.whiteColor,
@@ -83,7 +80,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 setState(() {
                   vm.plansClick(1);
                 });
-
               },
               child: Container(
                 margin: const EdgeInsets.only(top: 10,bottom: 5),
@@ -115,7 +111,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 setState(() {
                   vm.plansClick(2);
                 });
-
               },
               child: Container(
                 margin: const EdgeInsets.only(top: 10,bottom: 5),

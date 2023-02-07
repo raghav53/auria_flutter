@@ -1,8 +1,11 @@
 
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:auria_ai/screens/ForgotPassword/ForgoPasswordScreen.dart';
+import 'package:auria_ai/screens/Welcome/WelcomeScreenVM.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,10 +19,14 @@ import '../SignUp/SignUpModel.dart';
 
 class LoginVM with ChangeNotifier{
 
+  var vm = WelcomeScreenVM();
+
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool obscureText = true;
   String showPass = "assets/images/eye_open.png";
+
+
 
 
   void showHideClick(BuildContext context) {
@@ -39,8 +46,7 @@ class LoginVM with ChangeNotifier{
   }
 
   void clickGmail(BuildContext context) {
-
-
+    vm.clickGmail(context);
   }
 
 
@@ -51,11 +57,18 @@ class LoginVM with ChangeNotifier{
   Future<void> signIn(BuildContext context) async {
     showLoader(context);
 
+    var device_type = "1";
+    if (Platform.isAndroid) {
+      device_type = "1";
+    } else if (Platform.isIOS) {
+      device_type = "2";
+    }
+
     Map<String ,String> map = {
       "email": email.text.toString().trim(),
       "password": password.text.toString().trim(),
-      "device_type": "1",
-      "device_token": "qwe",
+      "device_type": device_type,
+      "device_token": token,
     };
 
 

@@ -1,4 +1,5 @@
 import 'package:auria_ai/screens/Login/LoginVM.dart';
+import 'package:auria_ai/screens/Welcome/WelcomeScreenVM.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/color.dart';
@@ -123,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
 
 //_________________________________________Password____________________________
+
                                     Container(
                                       height: 50,
                                       alignment: Alignment.center,
@@ -160,11 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                             children: [
                                               InkWell(
                                                   onTap: (){
-
                                                     setState(() {
                                                       vm.showHideClick(context);
                                                     });
-
                                                   },
                                                   child: Image.asset(vm.showPass,height: 20,width: 20,)),
                                               SizedBox(width: 20,),
@@ -234,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           children: [
                                             Image.asset("assets/images/apple_icon.png",height: 25,width: 25,),
                                             const SizedBox(width: 15,),
-                                            Common.boldText(Strings.signUpWitheApple, 16, AppColor.fieldTextColor,TextAlign.start),
+                                            Common.boldText(Strings.signInWitheApple, 16, AppColor.fieldTextColor,TextAlign.start),
                                           ],
                                         ),
                                       ),
@@ -257,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           children: [
                                             Image.asset("assets/images/google_icon.png",height: 25,width: 25,),
                                             const SizedBox(width: 15,),
-                                            Common.boldText(Strings.signUpWitheGoogle, 16, AppColor.fieldTextColor,TextAlign.start),
+                                            Common.boldText(Strings.signInWitheGoogle, 16, AppColor.fieldTextColor,TextAlign.start),
                                           ],
                                         ),
                                       ),

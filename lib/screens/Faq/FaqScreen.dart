@@ -28,35 +28,37 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        title: Common.mediumText(
-            Strings.faqs, 20, AppColor.whiteColor, TextAlign.start),
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            vm.backClick(context);
-          },
-        ),
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(image: AssetImage("assets/images/background_img.png"), fit: BoxFit.cover),
       ),
-      body: Stack(
-        children: [
-          backgroundImage(context),
-          Container(
-            margin: const EdgeInsets.only(top: 83.5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                saveChatList()
-              ],
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0.0,
+          centerTitle: true,
+          title: Common.mediumText(
+              Strings.faqs, 20, AppColor.whiteColor, TextAlign.start),
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              vm.backClick(context);
+            },
           ),
-        ],
+        ),
+        body: Container(
+          margin: const EdgeInsets.only(top: 83.5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              saveChatList()
+            ],
+          ),
+        ),
       ),
     );
   }

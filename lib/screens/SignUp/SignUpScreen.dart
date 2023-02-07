@@ -18,6 +18,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   var vm = SignUpVM();
 
+
+
   @override
   Widget build(BuildContext context) {
 

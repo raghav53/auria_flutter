@@ -1,5 +1,6 @@
 import 'package:auria_ai/screens/EditProfile/EditProfileScreen.dart';
 import 'package:auria_ai/screens/Faq/FaqScreen.dart';
+import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,7 +22,7 @@ class SettingsVM with ChangeNotifier{
   }
 
   void backClick(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
   }
 
   void editClick(BuildContext context) {

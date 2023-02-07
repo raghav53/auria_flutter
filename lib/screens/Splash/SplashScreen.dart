@@ -20,7 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     vm.profile(context);
+    vm.firebaseToken();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

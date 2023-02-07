@@ -63,7 +63,7 @@ class Strings{
   static var changePassword = "Change Password";
   static var termCondition = "Terms & Conditions";
   static var privacyPolicy = "Privacy Policy";
-  static var faqs = "Faqs";
+  static var faqs = "FAQs";
   static var upgradeApp = "Upgrade App";
   static var shareApp = "Share App";
   static var edit = "Edit";
