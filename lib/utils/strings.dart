@@ -37,7 +37,7 @@ class Strings{
   static var logOut = "Log Out";
   static var dashboard = "Dashboard";
   static var searchHere = "Search Here...";
-  static var freeTrialEnd = "Your Free Trial has been ended in";
+  static var freeTrialEnd = "Your Free Trial has been ended\nin";
   static var category = "Category";
   static var toYourAiAssistant = "to your ai assistant";
   static var unlockUnlimitedAccess = "Unlock \nUnlimited Access";
