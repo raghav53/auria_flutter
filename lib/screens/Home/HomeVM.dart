@@ -18,19 +18,21 @@ import '../Subscription/SubscriptionScreen.dart';
 class HomeVM with ChangeNotifier{
 
 
+  TextEditingController search = TextEditingController();
+  List<String> listImages = ['assets/images/mess_icon.png','assets/images/translate_icon.png','assets/images/search_icon.png','assets/images/history_icon_cat.png','assets/images/command_icon.png','assets/images/sql_icon.png'];
+  List<String> listTitles = ['New Chat','Translate','Discover','History','Command','SQL'];
+  String choise = '';
+
   String firstName(){
-    // return signUpModel.body!.firstName.toString();
-    return "john";
+    return signUpModel.body!.firstName.toString();
   }
 
   String lastName(){
-    return "Deo";
-    // return signUpModel.body!.lastName.toString();
+    return signUpModel.body!.lastName.toString();
   }
 
   String emailID(){
-    return "johndeo@yopmail.com";
-    // return signUpModel.body!.email.toString();
+    return signUpModel.body!.email.toString();
   }
 
 
@@ -62,22 +64,5 @@ class HomeVM with ChangeNotifier{
     );
   }
 
-  Future<void> getProfile(BuildContext context) async {
-    SharedPreferences srf = await SharedPreferences.getInstance();
-    String res = await getMethodWithQuery("GET", "${AllKeys.getProfile}?user_id=${srf.getString(AllKeys.userID)}", null, context);
-
-    var response = jsonDecode(res);
-
-    signUpModel = SignUpModel.fromJson(response);
-    if(signUpModel.code == 200){
-      showToast(signUpModel.message.toString());
-      notifyListeners();
-    }else{
-      showError(signUpModel.message.toString());
-      notifyListeners();
-    }
-
-
-  }
 
 }

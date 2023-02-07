@@ -21,12 +21,37 @@ class SplashVM {
   nextPage(BuildContext context) async {
     SharedPreferences srf = await SharedPreferences.getInstance();
     
-    // if(srf.getString(AllKeys.auth) == null || srf.getString(AllKeys.auth) == ""){
+    if(srf.getString(AllKeys.auth) == null || srf.getString(AllKeys.auth) == ""){
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> OnBoardingScreen()), (route) => false);
-    // }else{
-    //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>
-    //       HomeScreen()), (route) => false);
-    // }
+    }else{
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>
+          HomeScreen()), (route) => false);
+    }
+
+  }
+
+  profile(BuildContext context) async {
+    SharedPreferences srf = await SharedPreferences.getInstance();
+
+    if(srf.getString(AllKeys.auth) == null || srf.getString(AllKeys.auth) == ""){
+
+    }else{
+
+        SharedPreferences srf = await SharedPreferences.getInstance();
+        String res = await getMethodWithQuery("GET", "${AllKeys.getProfile}?user_id=${srf.getString(AllKeys.userID)}", null, context);
+
+        var response = jsonDecode(res);
+
+        signUpModel = SignUpModel.fromJson(response);
+        if(signUpModel.code == 200){
+
+        }else{
+
+        }
+
+
+
+    }
 
   }
 

@@ -212,7 +212,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 InkWell(
                                   onTap: () {
                                     if(vm.validation()){
-                                      // vm.updateProfile(context);
+                                      vm.updateProfile(context);
                                     }
                                   },
                                   child: Container(

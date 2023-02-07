@@ -80,8 +80,7 @@ class _LogoutConfirmation extends State<LogoutConfirmation> {
                       width: 80,
                       child: ElevatedButton(
                           onPressed: () {
-                            // vm.logout(context);
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> LoginScreen()), (route) => false);
+                            vm.logout(context);
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: AppColor.greenColor, backgroundColor: AppColor.greenColor,

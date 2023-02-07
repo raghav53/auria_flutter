@@ -53,7 +53,7 @@ class MainDrawer extends StatelessWidget {
                       ],
                     ),
                     Common.boldText("${vm.firstName()}"" ${vm.lastName()}", 20, AppColor.whiteColor,TextAlign.start),
-                    Common.commonText(vm.emailID(), 15, AppColor.whiteColor,TextAlign.start)
+                    Common.commonText(vm.emailID().toString(), 15, AppColor.whiteColor,TextAlign.start)
                   ],
                 ),
               ),
@@ -116,7 +116,6 @@ class MainDrawer extends StatelessWidget {
       ),
 
     );
-
   }
 
   Widget _customListTile({required BuildContext context, required String title,

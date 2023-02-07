@@ -2,6 +2,7 @@
 class AllKeys{
 
   //--------------------------------------------Api Keys--------------------------------
+
   static var signup = "signup";
   static var login = "login";
   static var logout = "logout";
@@ -11,14 +12,12 @@ class AllKeys{
   static var changePassword = "change-password";
   static var getFaqs = "get-faqs";
 
-
   //--------------------------------------------SharedPreferences Keys-------------------
 
   static String auth = "auth";
   static String userID = "userID";
   static String userFirstName = "userFirstName";
   static String userLastName = "userLastName";
-  static String userEmail = "userID";
-
+  static String userEmail = "email";
 
 }

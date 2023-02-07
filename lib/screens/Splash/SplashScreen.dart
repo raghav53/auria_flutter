@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // vm.getProfile(context);
+    vm.profile(context);
   }
   @override
   Widget build(BuildContext context) {

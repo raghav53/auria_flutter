@@ -22,12 +22,9 @@ class EditProfileVM with ChangeNotifier{
 
   getUserInfo(){
 
-    // firstName.text = signUpModel.body!.firstName;
-    // lastName.text = signUpModel.body!.lastName;
-    // email.text = signUpModel.body!.email;
-    firstName.text = "John";
-    lastName.text = "Deo";
-    email.text = "johndeo@yopmail.com";
+    firstName.text = signUpModel.body!.firstName;
+    lastName.text = signUpModel.body!.lastName;
+    email.text = signUpModel.body!.email;
 
   }
 

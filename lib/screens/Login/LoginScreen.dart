@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
-import '../Home/HomeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
 
@@ -191,8 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                         if(vm.validation()){
                                           hideKeyboard();
-                                          // context.read<LoginVM>().signIn(context);
-                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+                                          vm.signIn(context);
                                         }
 
                                       },

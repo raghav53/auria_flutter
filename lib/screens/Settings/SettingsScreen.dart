@@ -60,7 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const SizedBox(height: 5,),
                   Common.boldText("${vm.firstName()}"" ${vm.lastName()}", 25, AppColor.whiteColor,TextAlign.center),
                   const SizedBox(height: 5,),
-                  Common.commonText(vm.emailID(), 15, AppColor.whiteColor,TextAlign.start),
+                  Common.commonText(vm.emailID().toString(), 15, AppColor.whiteColor,TextAlign.start),
                   const SizedBox(height: 10,),
                   SizedBox(
                     height: 30,
