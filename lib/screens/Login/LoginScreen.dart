@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auria_ai/screens/Login/LoginVM.dart';
 import 'package:auria_ai/screens/Welcome/WelcomeScreenVM.dart';
 import 'package:flutter/material.dart';
@@ -216,7 +218,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Common.commonText("OR", 16, AppColor.black,TextAlign.start),
                                     ),
                                     const SizedBox(height: 5,),
-                                    InkWell(
+
+                                    (Platform.isIOS)?InkWell(
                                       onTap: () {
                                         vm.clickApple(context);
                                       },
@@ -238,8 +241,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    InkWell(
+                                    ):SizedBox(),
+                                    (Platform.isAndroid)?InkWell(
                                       onTap: () {
                                         vm.clickGmail(context);
                                       },
@@ -261,7 +264,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ],
                                         ),
                                       ),
-                                    ),
+                                    ):SizedBox(),
+
                                     const SizedBox(height: 20,),
                                     InkWell(
                                       onTap: () {
