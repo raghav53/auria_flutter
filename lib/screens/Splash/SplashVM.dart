@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../apis/api_controller.dart';
 import '../../utils/common.dart';
+import '../../utils/user_preference.dart';
 import '../Onboarding/OnBoardingScreen.dart';
 import '../SignUp/SignUpModel.dart';
 
@@ -52,14 +53,8 @@ class SplashVM {
         var response = jsonDecode(res);
 
         signUpModel = SignUpModel.fromJson(response);
-        if(signUpModel.code == 200){
-
-        }else{
-
-        }
-
-
-
+        UserPreference.shared.setUserData(signUpModel);
+        UserPreference.shared.setLoggedIn(true);
     }
 
   }

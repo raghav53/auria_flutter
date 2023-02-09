@@ -18,6 +18,21 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   var vm = SubscriptionVM();
 
   @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  fetchProducts() async{
+    var products = await SubscriptionVM.instance.fetchSubscriptions();
+    vm.productList = products;
+    setState(() {
+
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,

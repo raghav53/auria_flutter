@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     vm.listImages[index].toString(),
                     height: 40,
                     width: 40,
-                    color: (vm.choise == vm.listTitles[index].toString()) ? Colors.white : AppColor.fieldTextColor,
+                    color: AppColor.fieldTextColor,
                   ),
                   const SizedBox(
                     height: 10,
@@ -182,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(
                       fontFamily: "Outfit-reg",
                       fontSize: 14,
-                      color: (vm.choise == vm.listTitles[index].toString()) ? Colors.white : AppColor.fieldTextColor,
+                      color:  AppColor.fieldTextColor,
                     ),
                   )
                 ],
@@ -190,11 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           selected: (vm.choise == vm.listTitles[index].toString()) ? true : false,
-          selectedColor: AppColor.greenColor,
+          selectedColor: AppColor.fieldColor,
           onSelected: (bool value) {
-            setState(() {
-              vm.choise = vm.listTitles[index].toString();
-            });
+            vm.newChatClick(context);
           },
         );
       },

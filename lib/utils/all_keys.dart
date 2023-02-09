@@ -12,6 +12,7 @@ class AllKeys{
   static var editProfile = "edit-profile";
   static var changePassword = "change-password";
   static var getFaqs = "get-faqs";
+  static var aiChat = "aiChat";
 
   //--------------------------------------------SharedPreferences Keys-------------------
 

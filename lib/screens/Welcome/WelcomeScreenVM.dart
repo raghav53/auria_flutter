@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/user_preference.dart';
 import '../SignUp/SignUpModel.dart';
 
 class WelcomeScreenVM with ChangeNotifier{
@@ -22,12 +23,6 @@ class WelcomeScreenVM with ChangeNotifier{
   }
 
   void clickApple(BuildContext context) {
-
-  }
-
-  void clickGmail(BuildContext context) {
-
-    googleSignup(context);
 
   }
 
@@ -51,8 +46,13 @@ class WelcomeScreenVM with ChangeNotifier{
 
       UserCredential result = await auth.signInWithCredential(authCredential);
       User? user = result.user;
+
       if (result != null) {
-        socialLogin(user,context);
+
+        List<String> name = user!.displayName.toString().split(" ");
+
+        socialData(user.uid,user.email,name[0],name[1],context);
+
       }else{
         showError("Something wrong");
       }
@@ -60,10 +60,8 @@ class WelcomeScreenVM with ChangeNotifier{
   }
 
 
-  Future<void> socialLogin(User? user,BuildContext context) async {
-    showLoader(context);
+  Future<void> socialData(String uid, String? email, String firstName, String lastName, BuildContext context) async {
 
-    List<String> name = user!.displayName.toString().split(" ");
 
     var device_type = "1";
 
@@ -75,23 +73,28 @@ class WelcomeScreenVM with ChangeNotifier{
     }
 
     Map<String,String> map = {
-      "social_id":user.uid,
+      "social_id": uid,
       "social_type":"1",
-      "first_name":name[0],
-      "last_name":name[1],
-      "email":user.email.toString(),
+      "first_name":firstName,
+      "last_name":lastName,
+      "email":email.toString(),
       "device_type": device_type,
       "device_token":token,
     };
-
     print("JHIJKHKJ$map");
+    showLoader(context);
+    socialLogin(map,context);
+  }
 
+  Future<void> socialLogin(Map<String, String> map, BuildContext context) async {
     SharedPreferences srf = await SharedPreferences.getInstance();
     String res = await postMethod("POST", AllKeys.socialLogin, map, null, context);
 
     var response = jsonDecode(res);
 
     signUpModel = SignUpModel.fromJson(response);
+    UserPreference.shared.setUserData(signUpModel);
+    UserPreference.shared.setLoggedIn(true);
     hideLoader(context);
     if(signUpModel.code == 200){
       srf.setString(AllKeys.auth, signUpModel.body!.authorization.toString());
@@ -105,7 +108,5 @@ class WelcomeScreenVM with ChangeNotifier{
     }else{
       showError(signUpModel.message.toString());
     }
-
-
   }
 }

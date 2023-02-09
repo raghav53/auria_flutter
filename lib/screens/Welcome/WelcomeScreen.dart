@@ -128,7 +128,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                                 (Platform.isAndroid)?InkWell(
                                   onTap: () {
-                                    vm.clickGmail(context);
+                                    vm.googleSignup(context);
                                   },
                                   child: Container(
                                     height: 45,

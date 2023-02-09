@@ -14,6 +14,7 @@ import '../../apis/api_controller.dart';
 import '../../utils/all_keys.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
+import '../../utils/user_preference.dart';
 import '../Home/HomeScreen.dart';
 import '../SignUp/SignUpModel.dart';
 
@@ -46,7 +47,9 @@ class LoginVM with ChangeNotifier{
   }
 
   void clickGmail(BuildContext context) {
-    vm.clickGmail(context);
+
+    vm.googleSignup(context);
+
   }
 
 
@@ -71,13 +74,14 @@ class LoginVM with ChangeNotifier{
       "device_token": token,
     };
 
-
     SharedPreferences srf = await SharedPreferences.getInstance();
     String res = await postMethod("POST",AllKeys.login, map, null,context);
 
     var response = jsonDecode(res);
     hideLoader(context);
     signUpModel = SignUpModel.fromJson(response);
+    UserPreference.shared.setUserData(signUpModel);
+    UserPreference.shared.setLoggedIn(true);
     if(signUpModel.code == 200){
 
       srf.setString(AllKeys.auth, signUpModel.body!.authorization.toString());

@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../apis/api_controller.dart';
 import '../../utils/all_keys.dart';
 import '../../utils/strings.dart';
+import '../../utils/user_preference.dart';
 import '../Login/LoginScreen.dart';
 
 class SignUpVM with ChangeNotifier{
@@ -84,6 +85,8 @@ class SignUpVM with ChangeNotifier{
     hideLoader(context);
 
     signUpModel = SignUpModel.fromJson(response);
+    UserPreference.shared.setUserData(signUpModel);
+    UserPreference.shared.setLoggedIn(true);
     if(signUpModel.code == 200){
 
       showToast(signUpModel.message.toString());

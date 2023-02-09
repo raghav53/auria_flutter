@@ -73,6 +73,7 @@ class Strings{
   static var submit = "Submit";
   static var editProfile = "Edit Profile";
   static var limitation = "Limitation";
+  static var aiSearch = "Ai Search";
   static var enterFirstName = "Please enter first name";
   static var enterLastName = "Please enter last name";
   static var enterEmail = "Please enter email";

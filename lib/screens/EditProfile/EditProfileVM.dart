@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
+import '../../utils/user_preference.dart';
 
 class EditProfileVM with ChangeNotifier{
 
@@ -81,6 +82,8 @@ class EditProfileVM with ChangeNotifier{
     var response = jsonDecode(res);
 
     signUpModel = SignUpModel.fromJson(response);
+    UserPreference.shared.setUserData(signUpModel);
+    UserPreference.shared.setLoggedIn(true);
     hideLoader(context);
     if(signUpModel.code == 200){
       showToast(signUpModel.message.toString());
