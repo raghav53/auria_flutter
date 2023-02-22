@@ -6,16 +6,18 @@ import '../../utils/common.dart';
 import '../../utils/strings.dart';
 
 class FaqScreen extends StatefulWidget {
+
   static const String route = "FaqScreenRoute";
   const FaqScreen({Key? key}) : super(key: key);
 
   @override
   State<FaqScreen> createState() => _FaqScreenState();
+
 }
 
 class _FaqScreenState extends State<FaqScreen> {
-  var vm = FaqVM();
 
+  var vm = FaqVM();
 
   @override
   void initState() {
@@ -24,7 +26,6 @@ class _FaqScreenState extends State<FaqScreen> {
     vm.getFaq(context);
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,4 +147,5 @@ class _FaqScreenState extends State<FaqScreen> {
           }),
     );
   }
+
 }
