@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'color.dart';
@@ -9,6 +10,7 @@ Pattern pattern =
     r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
     r"{0,253}[a-zA-Z0-9])?)*$";
 
+const platform = MethodChannel('com.auria/custom');
 
 class Common{
 

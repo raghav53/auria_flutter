@@ -10,6 +10,7 @@ import 'package:auria_ai/utils/common.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +24,8 @@ class WelcomeScreenVM with ChangeNotifier{
   }
 
   void clickApple(BuildContext context) {
+    platform.invokeMethod('iosAppLogin');
+    _appleSignIn(context);
 
   }
 
@@ -31,7 +34,6 @@ class WelcomeScreenVM with ChangeNotifier{
     Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
 
   }
-
 
   Future<void> googleSignup(BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -60,21 +62,48 @@ class WelcomeScreenVM with ChangeNotifier{
   }
 
 
+  Future<void> _appleSignIn(BuildContext context) async {
+    try {
+      platform.setMethodCallHandler((call) async {
+        switch (call.method) {
+          case 'iosAppLogin':
+            debugPrint('apple login credential ${call.arguments}');
+            if (call.arguments["status"] == "success") {
+              String? name = call.arguments["firstName"].toString();
+              if (name != null) {
+                name = "$name ${call.arguments["lastName"]}";
+              }
+              List<String> name2 = name.toString().split(" ");
+              socialData(call.arguments["appleId"],call.arguments["email"].toString(),name2[0].toString(),name2[1].toString(),context);
+            }
+            return;
+          default:
+            throw PlatformException(code: '1', message: 'Not Implemented');
+        }
+      });
+    } on PlatformException catch (e) {
+      debugPrint('PlatformException: apple login : $e');
+    }
+  }
+
   Future<void> socialData(String uid, String? email, String firstName, String lastName, BuildContext context) async {
 
 
     var device_type = "1";
+    var social_type = "1";
 
     if (Platform.isAndroid) {
       device_type = "1";
+      social_type = "1";
     }
     else if (Platform.isIOS) {
       device_type = "2";
+      social_type = "3";
     }
 
     Map<String,String> map = {
       "social_id": uid,
-      "social_type":"1",
+      "social_type":social_type,
       "first_name":firstName,
       "last_name":lastName,
       "email":email.toString(),
@@ -109,4 +138,5 @@ class WelcomeScreenVM with ChangeNotifier{
       showError(signUpModel.message.toString());
     }
   }
+
 }
