@@ -66,6 +66,8 @@ class EditProfileVM with ChangeNotifier{
 
     CommonModel commonModel = CommonModel.fromJson(response);
 
+    FocusScope.of(context).unfocus();
+
     if(commonModel.code == 200){
       showToast(commonModel.message.toString());
 
@@ -85,6 +87,7 @@ class EditProfileVM with ChangeNotifier{
     UserPreference.shared.setUserData(signUpModel);
     UserPreference.shared.setLoggedIn(true);
     hideLoader(context);
+    FocusScope.of(context).unfocus();
     if(signUpModel.code == 200){
       showToast(signUpModel.message.toString());
       Navigator.pop(context);

@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 130,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

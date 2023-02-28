@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Common.commonText(Strings.signInYourAccount, 20, AppColor.textColor,TextAlign.start),
+                                        Common.commonText(Strings.createYourNewAccount, 20, AppColor.textColor,TextAlign.start),
                                         const SizedBox(height: 20,),
 
 //_________________________________________First Name____________________________
@@ -113,7 +113,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     keyboardType: TextInputType.name,
                                                     controller: vm.firstName,
                                                     style: TextStyle(color: AppColor.fieldTextColor),
+                                                    maxLength: 10,
                                                     decoration: InputDecoration(
+                                                        counterText: '',
                                                         border: InputBorder.none,
                                                         focusedBorder: InputBorder.none,
                                                         enabledBorder: InputBorder.none,
@@ -157,7 +159,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     keyboardType: TextInputType.name,
                                                     controller: vm.lastName,
                                                     style: TextStyle(color: AppColor.fieldTextColor),
+                                                    maxLength: 10,
                                                     decoration: InputDecoration(
+                                                        counterText: '',
                                                         border: InputBorder.none,
                                                         focusedBorder: InputBorder.none,
                                                         enabledBorder: InputBorder.none,
@@ -334,8 +338,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           onTap: () {
                                             if(vm.validation()){
                                               hideKeyboard();
-                                              // vm.signUp(context);
-                                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+                                              vm.signUp(context);
+
                                             }
                                           },
                                           child: Container(

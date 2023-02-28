@@ -230,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             color: AppColor.fieldColor,
                                             border: Border.all(color: AppColor.fieldColor),
                                             borderRadius: BorderRadius.circular(30)),
-                                        margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                        margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                                         child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           mainAxisAlignment: MainAxisAlignment.center,

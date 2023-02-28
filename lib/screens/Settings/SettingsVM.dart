@@ -9,6 +9,12 @@ import '../ChangePassword/ChangePasswordScreen.dart';
 
 class SettingsVM with ChangeNotifier{
 
+  String firstAndLast(){
+    var firstname = signUpModel.body!.firstName.toString();
+    var lastname = signUpModel.body!.lastName.toString();
+    return "${firstname[0]}${lastname[0]}";
+  }
+
   String firstName(){
     return signUpModel.body!.firstName.toString();
   }

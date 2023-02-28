@@ -55,20 +55,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           ),
         ),
 
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10,right: 20),
-              child: Common.boldText(Strings.unlockUnlimitedAccess, 30, AppColor.whiteColor,TextAlign.start),
+            Container(
+              alignment: Alignment.topRight,
+                child: Image.asset("assets/images/girl_img.png",height: 200,width: 170,)),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10,right: 20),
+                  child: Common.boldText(Strings.unlockUnlimitedAccess, 25, AppColor.whiteColor,TextAlign.start),
+                ),
+                const SizedBox(height: 10,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Common.commonText(Strings.toYourAiAssistant, 20, AppColor.whiteColor,TextAlign.start),
+                ),
+                Flexible(child: subscriptionList()),
+              ],
             ),
-            const SizedBox(height: 10,),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Common.commonText(Strings.toYourAiAssistant, 20, AppColor.whiteColor,TextAlign.start),
-            ),
-            Flexible(child: subscriptionList())
           ],
         ),
 
@@ -79,6 +87,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   Widget subscriptionList() {
     return  Container(
       margin: const EdgeInsets.only(top: 24),
+      height: double.infinity,
       decoration: BoxDecoration(
         color: AppColor.whiteColor,
         border: Border.all(color: AppColor.whiteColor),

@@ -38,10 +38,9 @@ class SubscriptionVM with ChangeNotifier{
 
   Future<List<ProductDetails>> fetchSubscriptions() async {
     final bool available = await InAppPurchase.instance.isAvailable();
-    if (!available) {
-      // The store cannot be reached or accessed.
-      // This could also be the case if you run the app on emulator.
-      // Please use a physical device for testing.
+    if (!available)
+    {
+
       debugPrint('Unable to reach to store');
       if (defaultTargetPlatform == TargetPlatform.iOS) {
 

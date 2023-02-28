@@ -23,6 +23,11 @@ class HomeVM with ChangeNotifier{
   List<String> listTitles = ['New Chat','Translate','Discover','History','Command','SQL'];
   String choise = '';
 
+  String firstAndLast(){
+    var firstname = signUpModel.body!.firstName.toString();
+    var lastname = signUpModel.body!.lastName.toString();
+    return "${firstname[0]}${lastname[0]}";
+  }
   String firstName(){
     return signUpModel.body!.firstName.toString();
   }

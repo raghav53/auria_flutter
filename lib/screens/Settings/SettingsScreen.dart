@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     'assets/images/image_back.png',
                   ),
                 ),
-                Common.boldText("JD", 45, AppColor.greenColor,TextAlign.center)
+                Common.boldText(vm.firstAndLast(), 45, AppColor.greenColor,TextAlign.center)
               ],
             ),
             const SizedBox(height: 5,),
@@ -130,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset("assets/images/mail_icon.png",height: 20,width: 20,),
+                        Image.asset("assets/images/change_password.png",height: 20,width: 20,),
                         const SizedBox(width: 10,),
                         Common.mediumText(Strings.changePassword, 18, AppColor.fieldTextColor, TextAlign.start)
                       ],
@@ -162,7 +162,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset("assets/images/mail_icon.png",height: 20,width: 20,),
+                        Image.asset("assets/images/change_password.png",height: 20,width: 20,),
                         const SizedBox(width: 10,),
                         Common.mediumText(Strings.termCondition, 18, AppColor.fieldTextColor, TextAlign.start)
                       ],
@@ -194,7 +194,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset("assets/images/mail_icon.png",height: 20,width: 20,),
+                        Image.asset("assets/images/privacy_icon.png",height: 20,width: 20,),
                         const SizedBox(width: 10,),
                         Common.mediumText(Strings.privacyPolicy, 18, AppColor.fieldTextColor, TextAlign.start)
                       ],
@@ -226,7 +226,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset("assets/images/mail_icon.png",height: 20,width: 20,),
+                        Image.asset("assets/images/faq_icon.png",height: 20,width: 20,),
                         const SizedBox(width: 10,),
                         Common.mediumText(Strings.faqs, 18, AppColor.fieldTextColor, TextAlign.start)
                       ],
@@ -258,7 +258,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset("assets/images/mail_icon.png",height: 20,width: 20,),
+                        Image.asset("assets/images/upgrade_icon.png",height: 20,width: 20,),
                         const SizedBox(width: 10,),
                         Common.mediumText(Strings.upgradeApp, 18, AppColor.fieldTextColor, TextAlign.start)
                       ],
@@ -290,7 +290,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset("assets/images/mail_icon.png",height: 20,width: 20,),
+                        Image.asset("assets/images/share_icon.png",height: 20,width: 20,),
                         const SizedBox(width: 10,),
                         Common.mediumText(Strings.shareApp, 18, AppColor.fieldTextColor, TextAlign.start)
                       ],

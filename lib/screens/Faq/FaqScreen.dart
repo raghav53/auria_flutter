@@ -65,86 +65,87 @@ class _FaqScreenState extends State<FaqScreen> {
   }
 
   Widget saveChatList() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.85,
-      margin: const EdgeInsets.only(top: 20),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        border: Border.all(color: AppColor.whiteColor),
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-      ),
-      padding: const EdgeInsets.fromLTRB(15, 25, 15, 10),
-      child: ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.only(top: 5, bottom: 5),
-              decoration: BoxDecoration(
-                  color: AppColor.fieldColor,
-                  border: Border.all(color: AppColor.fieldColor),
-                  borderRadius: const BorderRadius.all(Radius.circular(10))),
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if(vm.faqClick == index){
-                      vm.faqClick = -1;
-                    }else{
-                      vm.faqClick = index;
-                    }
+    return Flexible(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(top: 20),
+        decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          border: Border.all(color: AppColor.whiteColor),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+        ),
+        padding: const EdgeInsets.fromLTRB(15, 25, 15, 10),
+        child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: const EdgeInsets.only(top: 5, bottom: 5),
+                decoration: BoxDecoration(
+                    color: AppColor.fieldColor,
+                    border: Border.all(color: AppColor.fieldColor),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                padding: const EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if(vm.faqClick == index){
+                        vm.faqClick = -1;
+                      }else{
+                        vm.faqClick = index;
+                      }
 
-                  });
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5,bottom: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            child: Common.commonText("Why do we use it?", 19,
-                                AppColor.textColor, TextAlign.start),
-                            width: MediaQuery.of(context).size.width*0.70,
-                          ),
-                          Container(
-                            child: vm.faqClick == index
-                                ? Image.asset(
-                                    "assets/images/arrow_up.png",
-                                    height: 15,
-                                    width: 15,
-                                    color: AppColor.fieldTextColor,
-                                  )
-                                : Image.asset(
-                                    "assets/images/arrow_down.png",
-                                    height: 15,
-                                    width: 15,
-                                    color: AppColor.fieldTextColor,
-                                  ),
-                          ),
-                        ],
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5,bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              child: Common.commonText("Why do we use it?", 19,
+                                  AppColor.textColor, TextAlign.start),
+                              width: MediaQuery.of(context).size.width*0.70,
+                            ),
+                            Container(
+                              child: vm.faqClick == index
+                                  ? Image.asset(
+                                      "assets/images/arrow_up.png",
+                                      height: 15,
+                                      width: 15,
+                                      color: AppColor.fieldTextColor,
+                                    )
+                                  : Image.asset(
+                                      "assets/images/arrow_down.png",
+                                      height: 15,
+                                      width: 15,
+                                      color: AppColor.fieldTextColor,
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    (vm.faqClick == index)? const SizedBox(height: 10,): const SizedBox(),
-                    Container(
-                      child: vm.faqClick == index
-                          ? Common.mediumText(
-                              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
-                              17,
-                              AppColor.fieldTextColor,
-                              TextAlign.start)
-                          : SizedBox(),
-                    ),
-                    (vm.faqClick == index)? const SizedBox(height: 10,): const SizedBox(),
-                  ],
+                      (vm.faqClick == index)? const SizedBox(height: 10,): const SizedBox(),
+                      Container(
+                        child: vm.faqClick == index
+                            ? Common.mediumText(
+                                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+                                17,
+                                AppColor.fieldTextColor,
+                                TextAlign.start)
+                            : SizedBox(),
+                      ),
+                      (vm.faqClick == index)? const SizedBox(height: 10,): const SizedBox(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 

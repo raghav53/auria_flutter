@@ -61,7 +61,7 @@ class _PaymentSuccessDialog extends State<PaymentSuccessDialog> {
             children: <Widget>[
               Image.asset("assets/images/payment_sucess_icon.png",height: 75,width: 75,),
               const SizedBox(height: 10,),
-              Common.boldText(Strings.confirmation, 25, AppColor.textColor, TextAlign.center),
+              Common.boldText(Strings.congratulation, 25, AppColor.textColor, TextAlign.center),
               const SizedBox(height: 10,),
               Common.commonText(Strings.yourSubscriptionIsNowActive,15,AppColor.textColor,TextAlign.center),
               const SizedBox(height: 20,),

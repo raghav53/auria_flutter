@@ -28,13 +28,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.60,
             child: Center(
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 50),
-                child: Image.asset(
-                  "assets/images/welcome_icon.png",
-                  width: 200,
-                  height: 200,
-                ),
+              child: Image.asset(
+                "assets/images/welcome_icon.png",
+                width: 250,
+                height: 250,
               ),
             ),
           ),

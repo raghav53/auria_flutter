@@ -112,7 +112,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                           children: [
                                             InkWell(
                                                 onTap: (){
-
                                                   setState(() {
                                                     vm.showHideClick(context);
                                                   });
@@ -178,7 +177,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     ),
                                   ),
 
-
 //_________________________________________Confirm Password____________________________
                                   Container(
                                     height: 50,
@@ -208,7 +206,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                   errorBorder: InputBorder.none,
                                                   disabledBorder: InputBorder.none,
                                                   contentPadding: const EdgeInsets.only(left: 2, bottom: 0, top: 0, right: 0),
-                                                  hintText: Strings.newPassword,
+                                                  hintText: Strings.confirmNewPassword,
                                                   hintStyle: TextStyle(color: AppColor.fieldTextColor)),
                                             ),
                                           ),
@@ -231,13 +229,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     ),
                                   ),
 
-
                                   const SizedBox(height: 5,),
                                   InkWell(
                                     onTap: () {
                                       if(vm.validation()){
-                                        // vm.changePassword(context);
-                                        Navigator.pop(context);
+                                        vm.changePassword(context);
+                                        // Navigator.pop(context);
                                       }
                                     },
                                     child: Container(
