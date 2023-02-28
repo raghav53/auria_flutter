@@ -1,20 +1,23 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:auria_ai/screens/SignUp/SignUpModel.dart';
 import 'package:auria_ai/utils/common.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../apis/api_controller.dart';
 import '../../utils/all_keys.dart';
 import '../../utils/strings.dart';
+import '../../utils/user_preference.dart';
 import '../Login/LoginScreen.dart';
 
 class SignUpVM with ChangeNotifier{
 
-  TextEditingController email = TextEditingController();
 
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
@@ -55,21 +58,23 @@ class SignUpVM with ChangeNotifier{
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const LoginScreen()), (route) => false);
   }
 
-  void clickForgotPassword(BuildContext context) {
-
-
-  }
 
   Future<void> signUp(BuildContext context) async {
     showLoader(context);
+    var device_type = "1";
+    if (Platform.isAndroid) {
+      device_type = "1";
+    } else if (Platform.isIOS) {
+      device_type = "2";
+    }
 
     Map<String ,String> map = {
       "first_name": firstName.text.toString().trim(),
       "last_name": lastName.text.toString().trim(),
       "email": email.text.toString().trim(),
       "password": password.text.toString().trim(),
-      "device_type": "1",
-      "device_token": "qwe",
+      "device_type": device_type,
+      "device_token": token,
     };
 
 
@@ -80,6 +85,8 @@ class SignUpVM with ChangeNotifier{
     hideLoader(context);
 
     signUpModel = SignUpModel.fromJson(response);
+    UserPreference.shared.setUserData(signUpModel);
+    UserPreference.shared.setLoggedIn(true);
     if(signUpModel.code == 200){
 
       showToast(signUpModel.message.toString());
@@ -90,7 +97,6 @@ class SignUpVM with ChangeNotifier{
       srf.setString(AllKeys.userEmail, signUpModel.body!.email.toString());
 
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
-
 
     }else{
 

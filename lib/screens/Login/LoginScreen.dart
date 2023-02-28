@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:auria_ai/screens/Login/LoginVM.dart';
+import 'package:auria_ai/screens/Welcome/WelcomeScreenVM.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
-import '../Home/HomeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
 
@@ -124,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
 
 //_________________________________________Password____________________________
+
                                     Container(
                                       height: 50,
                                       alignment: Alignment.center,
@@ -161,11 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                             children: [
                                               InkWell(
                                                   onTap: (){
-
                                                     setState(() {
                                                       vm.showHideClick(context);
                                                     });
-
                                                   },
                                                   child: Image.asset(vm.showPass,height: 20,width: 20,)),
                                               SizedBox(width: 20,),
@@ -191,8 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                         if(vm.validation()){
                                           hideKeyboard();
-                                          // context.read<LoginVM>().signIn(context);
-                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+                                          vm.signIn(context);
                                         }
 
                                       },
@@ -218,7 +218,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Common.commonText("OR", 16, AppColor.black,TextAlign.start),
                                     ),
                                     const SizedBox(height: 5,),
-                                    InkWell(
+
+                                    (Platform.isIOS)?InkWell(
                                       onTap: () {
                                         vm.clickApple(context);
                                       },
@@ -229,19 +230,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                             color: AppColor.fieldColor,
                                             border: Border.all(color: AppColor.fieldColor),
                                             borderRadius: BorderRadius.circular(30)),
-                                        margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                        margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                                         child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Image.asset("assets/images/apple_icon.png",height: 25,width: 25,),
                                             const SizedBox(width: 15,),
-                                            Common.boldText(Strings.signUpWitheApple, 16, AppColor.fieldTextColor,TextAlign.start),
+                                            Common.boldText(Strings.signInWitheApple, 16, AppColor.fieldTextColor,TextAlign.start),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    InkWell(
+                                    ):SizedBox(),
+                                    (Platform.isAndroid)?InkWell(
                                       onTap: () {
                                         vm.clickGmail(context);
                                       },
@@ -259,11 +260,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                           children: [
                                             Image.asset("assets/images/google_icon.png",height: 25,width: 25,),
                                             const SizedBox(width: 15,),
-                                            Common.boldText(Strings.signUpWitheGoogle, 16, AppColor.fieldTextColor,TextAlign.start),
+                                            Common.boldText(Strings.signInWitheGoogle, 16, AppColor.fieldTextColor,TextAlign.start),
                                           ],
                                         ),
                                       ),
-                                    ),
+                                    ):SizedBox(),
+
                                     const SizedBox(height: 20,),
                                     InkWell(
                                       onTap: () {

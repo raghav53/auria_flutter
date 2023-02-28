@@ -46,14 +46,16 @@ class MainDrawer extends StatelessWidget {
                             'assets/images/image_back.png',
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Common.boldText("JD", 40, AppColor.greenColor,TextAlign.start),
+                        Container(
+                          height: 70,
+                          width: 70,
+                          alignment: Alignment.center,
+                          child: Common.boldText(vm.firstAndLast(), 40, AppColor.greenColor,TextAlign.center),
                         ),
                       ],
                     ),
                     Common.boldText("${vm.firstName()}"" ${vm.lastName()}", 20, AppColor.whiteColor,TextAlign.start),
-                    Common.commonText(vm.emailID(), 15, AppColor.whiteColor,TextAlign.start)
+                    Common.commonText(vm.emailID().toString(), 15, AppColor.whiteColor,TextAlign.start)
                   ],
                 ),
               ),
@@ -104,8 +106,8 @@ class MainDrawer extends StatelessWidget {
                   children: [
                     Image.asset(
                       'assets/images/drawer_img.png',
-                      height: 180,
-                      width: 180,
+                      height: 250,
+                      width: 200,
                     ),
                   ],
                 ),
@@ -116,7 +118,6 @@ class MainDrawer extends StatelessWidget {
       ),
 
     );
-
   }
 
   Widget _customListTile({required BuildContext context, required String title,

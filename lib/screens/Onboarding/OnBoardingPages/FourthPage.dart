@@ -58,7 +58,7 @@ class FourthPage extends StatelessWidget {
                                 SizedBox(height: 20,),
                                 Common.boldText(Strings.history, 32, AppColor.textColor,TextAlign.start),
                                 SizedBox(height: 20,),
-                                Common.commonText(Strings.firstPageDec, 15, AppColor.textColor,TextAlign.center),
+                                Common.commonText(Strings.forthPageDec, 15, AppColor.textColor,TextAlign.center),
                                 SizedBox(height: 20,),
                               ],
                             ),

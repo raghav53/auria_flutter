@@ -1,4 +1,4 @@
-package com.auria_ai.auria_ai
+package com.auria.ai
 
 import io.flutter.embedding.android.FlutterActivity
 

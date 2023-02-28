@@ -18,55 +18,76 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   var vm = SubscriptionVM();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        title: Common.mediumText(Strings.subscription,20,AppColor.whiteColor,TextAlign.start),
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            vm.backClick(context);
-          },
-        ),
-      ),
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
 
-      body: Stack(
-        children: [
-          backgroundImage(context),
-          Container(
-            margin: const EdgeInsets.only(top: 100),
-            child: Column(
+  fetchProducts() async{
+    var products = await SubscriptionVM.instance.fetchSubscriptions();
+    vm.productList = products;
+    setState(() {
+
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(image: AssetImage("assets/images/background_img.png"), fit: BoxFit.cover),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          elevation: 0.0,
+          centerTitle: true,
+          title: Common.mediumText(Strings.subscription,20,AppColor.whiteColor,TextAlign.start),
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              vm.backClick(context);
+            },
+          ),
+        ),
+
+        body: Stack(
+          children: [
+            Container(
+              alignment: Alignment.topRight,
+                child: Image.asset("assets/images/girl_img.png",height: 200,width: 170,)),
+            Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.only(left: 10,right: 20),
-                  child: Common.boldText(Strings.unlockUnlimitedAccess, 30, AppColor.whiteColor,TextAlign.start),
+                  child: Common.boldText(Strings.unlockUnlimitedAccess, 25, AppColor.whiteColor,TextAlign.start),
                 ),
                 const SizedBox(height: 10,),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Common.commonText(Strings.toYourAiAssistant, 20, AppColor.whiteColor,TextAlign.start),
                 ),
-                subscriptionList()
+                Flexible(child: subscriptionList()),
               ],
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
 
+      ),
     );
   }
 
   Widget subscriptionList() {
     return  Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height*0.66,
       margin: const EdgeInsets.only(top: 24),
+      height: double.infinity,
       decoration: BoxDecoration(
         color: AppColor.whiteColor,
         border: Border.all(color: AppColor.whiteColor),
@@ -83,7 +104,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 setState(() {
                   vm.plansClick(1);
                 });
-
               },
               child: Container(
                 margin: const EdgeInsets.only(top: 10,bottom: 5),
@@ -115,7 +135,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 setState(() {
                   vm.plansClick(2);
                 });
-
               },
               child: Container(
                 margin: const EdgeInsets.only(top: 10,bottom: 5),

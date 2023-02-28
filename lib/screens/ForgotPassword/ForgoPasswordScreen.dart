@@ -135,8 +135,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       onTap: () {
                                         if(vm.validation()){
                                           hideKeyboard();
-                                          // vm.forgotPassword(context);
-                                          Navigator.pop(context);
+                                          vm.forgotPassword(context);
                                         }
 
                                       },

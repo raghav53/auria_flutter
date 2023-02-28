@@ -1,8 +1,11 @@
 
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:auria_ai/screens/ForgotPassword/ForgoPasswordScreen.dart';
+import 'package:auria_ai/screens/Welcome/WelcomeScreenVM.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,15 +14,20 @@ import '../../apis/api_controller.dart';
 import '../../utils/all_keys.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
+import '../../utils/user_preference.dart';
 import '../Home/HomeScreen.dart';
 import '../SignUp/SignUpModel.dart';
 
 class LoginVM with ChangeNotifier{
 
+  var vm = WelcomeScreenVM();
+
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool obscureText = true;
   String showPass = "assets/images/eye_open.png";
+
+
 
 
   void showHideClick(BuildContext context) {
@@ -40,6 +48,7 @@ class LoginVM with ChangeNotifier{
 
   void clickGmail(BuildContext context) {
 
+    vm.googleSignup(context);
 
   }
 
@@ -51,13 +60,19 @@ class LoginVM with ChangeNotifier{
   Future<void> signIn(BuildContext context) async {
     showLoader(context);
 
+    var device_type = "1";
+    if (Platform.isAndroid) {
+      device_type = "1";
+    } else if (Platform.isIOS) {
+      device_type = "2";
+    }
+
     Map<String ,String> map = {
       "email": email.text.toString().trim(),
       "password": password.text.toString().trim(),
-      "device_type": "1",
-      "device_token": "qwe",
+      "device_type": device_type,
+      "device_token": token,
     };
-
 
     SharedPreferences srf = await SharedPreferences.getInstance();
     String res = await postMethod("POST",AllKeys.login, map, null,context);
@@ -65,6 +80,8 @@ class LoginVM with ChangeNotifier{
     var response = jsonDecode(res);
     hideLoader(context);
     signUpModel = SignUpModel.fromJson(response);
+    UserPreference.shared.setUserData(signUpModel);
+    UserPreference.shared.setLoggedIn(true);
     if(signUpModel.code == 200){
 
       srf.setString(AllKeys.auth, signUpModel.body!.authorization.toString());

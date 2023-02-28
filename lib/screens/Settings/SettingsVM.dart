@@ -1,29 +1,34 @@
 import 'package:auria_ai/screens/EditProfile/EditProfileScreen.dart';
 import 'package:auria_ai/screens/Faq/FaqScreen.dart';
+import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../apis/api_controller.dart';
 import '../ChangePassword/ChangePasswordScreen.dart';
 
 class SettingsVM with ChangeNotifier{
 
+  String firstAndLast(){
+    var firstname = signUpModel.body!.firstName.toString();
+    var lastname = signUpModel.body!.lastName.toString();
+    return "${firstname[0]}${lastname[0]}";
+  }
+
   String firstName(){
-    // return signUpModel.body!.firstName.toString();
-    return "john";
+    return signUpModel.body!.firstName.toString();
   }
 
   String lastName(){
-    return "Deo";
-    // return signUpModel.body!.lastName.toString();
+    return signUpModel.body!.lastName.toString();
   }
 
   String emailID(){
-    return "johndeo@yopmail.com";
-    // return signUpModel.body!.email.toString();
+    return signUpModel.body!.email.toString();
   }
 
   void backClick(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
   }
 
   void editClick(BuildContext context) {
@@ -34,9 +39,21 @@ class SettingsVM with ChangeNotifier{
     Navigator.push(context, MaterialPageRoute(builder: (context)=> ChangePasswordScreen()));
   }
 
-  void termsClick(BuildContext context) {}
+  Future<void> termsClick(BuildContext context) async {
+    if (await canLaunch('http://3.227.175.32:5544/apis/terms')) {
+    await launch('http://3.227.175.32:5544/apis/terms');
+    } else {
+    throw 'Could not launch';
+    }
+  }
 
-  void privacyClick(BuildContext context) {}
+  Future<void> privacyClick(BuildContext context) async {
+    if (await canLaunch('http://3.227.175.32:5544/apis/privacy')) {
+    await launch('http://3.227.175.32:5544/apis/privacy');
+    } else {
+    throw 'Could not launch';
+    }
+  }
   
   void faqClick(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context)=> FaqScreen()));

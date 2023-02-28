@@ -1,16 +1,8 @@
-import 'dart:convert';
-
-import 'package:auria_ai/apis/api_controller.dart';
 import 'package:auria_ai/screens/Home/HomeVM.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../utils/all_keys.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
-import '../SignUp/SignUpModel.dart';
 import 'MainDrawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,28 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   var vm = HomeVM();
-
-  List<String> listImages = [
-    'assets/images/mess_icon.png',
-    'assets/images/translate_icon.png',
-    'assets/images/search_icon.png',
-    'assets/images/history_icon_cat.png',
-    'assets/images/command_icon.png',
-    'assets/images/sql_icon.png'
-  ];
-  List<String> listTitles = ['New Chat', 'Translate', 'Discover', 'History', 'Command', 'SQL'];
-  String choise = '';
-
-  @override
-  void initState() {
-    super.initState();
-    // vm.getProfile(context);
-  }
-
-  void callback() {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GridView.builder(
       padding: EdgeInsets.zero,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 15, mainAxisSpacing: 15),
-      itemCount: listImages.length,
+      itemCount: vm.listImages.length,
       itemBuilder: (BuildContext context, int index) {
         return ChoiceChip(
           backgroundColor: AppColor.fieldColor,
@@ -193,40 +165,39 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 130,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             child: Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Image.asset(
-                    listImages[index].toString(),
+                    vm.listImages[index].toString(),
                     height: 40,
                     width: 40,
-                    color: (choise == listTitles[index].toString()) ? Colors.white : AppColor.fieldTextColor,
+                    color: AppColor.fieldTextColor,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    listTitles[index].toString(),
+                    vm.listTitles[index].toString(),
                     style: TextStyle(
                       fontFamily: "Outfit-reg",
                       fontSize: 14,
-                      color: (choise == listTitles[index].toString()) ? Colors.white : AppColor.fieldTextColor,
+                      color:  AppColor.fieldTextColor,
                     ),
                   )
                 ],
               ),
             ),
           ),
-          selected: (choise == listTitles[index].toString()) ? true : false,
-          selectedColor: AppColor.greenColor,
+          selected: (vm.choise == vm.listTitles[index].toString()) ? true : false,
+          selectedColor: AppColor.fieldColor,
           onSelected: (bool value) {
-            setState(() {
-              choise = listTitles[index].toString();
-            });
+            vm.newChatClick(context);
           },
         );
       },
     );
   }
+
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "477083544370",
+    "project_id": "auria-ai",
+    "storage_bucket": "auria-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477083544370:android:29e90b111a5c2d4874852b",
+        "android_client_info": {
+          "package_name": "com.auria.ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "477083544370-kdb2hd8ucm21maj5uf5lkonfb5mm4r3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACiynXjB2T0JToWQjf0jrQzvJbR8NXvsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "477083544370-kdb2hd8ucm21maj5uf5lkonfb5mm4r3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

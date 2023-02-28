@@ -5,7 +5,8 @@ class Strings{
   static var next = "Next";
   static var skip = "Skip";
   static var newChat = "New Chat";
-  static var firstPageDec = "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.";
+  static var firstPageDec = "Have a chat with our AI for answers to your questions, help with completing tasks, or just providing some friendly conversation.";
+  static var forthPageDec = "The History section lets you quickly go back to past actions and searches, helping you retrace your steps to find the information you need.";
   static var draw = "Draw";
   static var discover = "Discover";
   static var history = "History";
@@ -37,7 +38,7 @@ class Strings{
   static var logOut = "Log Out";
   static var dashboard = "Dashboard";
   static var searchHere = "Search Here...";
-  static var freeTrialEnd = "Your Free Trial has been ended\nin";
+  static var freeTrialEnd = "Your Free Trial has\n ended on";
   static var category = "Category";
   static var toYourAiAssistant = "to your ai assistant";
   static var unlockUnlimitedAccess = "Unlock \nUnlimited Access";
@@ -54,16 +55,16 @@ class Strings{
   static var cvv = "CVV";
   static var yes = "Yes";
   static var no = "No";
-  static var congratulation = "Congratulation";
+  static var congratulation = "Congratulations";
   static var goDashboard = "Go To Dashboard";
   static var yourSubscriptionIsNowActive = "Your subscription is now active";
   static var areYouSureYouWantToLogout = "Are you sure want to logout ?";
   static var confirmation = "Confirmation";
-  static var areYouSureYouWantToDeleteThisChat = "Are you sure want to delete this chat?";
+  static var areYouSureYouWantToDeleteThisChat = "Are you sure you want to delete this chat?";
   static var changePassword = "Change Password";
   static var termCondition = "Terms & Conditions";
   static var privacyPolicy = "Privacy Policy";
-  static var faqs = "Faqs";
+  static var faqs = "FAQs";
   static var upgradeApp = "Upgrade App";
   static var shareApp = "Share App";
   static var edit = "Edit";
@@ -73,6 +74,7 @@ class Strings{
   static var submit = "Submit";
   static var editProfile = "Edit Profile";
   static var limitation = "Limitation";
+  static var aiSearch = "Ai Search";
   static var enterFirstName = "Please enter first name";
   static var enterLastName = "Please enter last name";
   static var enterEmail = "Please enter email";

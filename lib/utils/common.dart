@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:just_audio/just_audio.dart';
 import 'color.dart';
 
 
@@ -118,4 +119,16 @@ void hideLoader(BuildContext context){
 
 void hideKeyboard() {
   FocusManager.instance.primaryFocus?.unfocus();
+}
+
+playSendTone() async {
+  AudioPlayer player = AudioPlayer();
+  await player.setAsset('assets/sounds/sendTone.mp3');
+  player.play();
+}
+
+playReceiveTone() async {
+  AudioPlayer player = AudioPlayer();
+  await player.setAsset('assets/sounds/receiveTone.mp3');
+  player.play();
 }

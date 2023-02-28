@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auria_ai/screens/Welcome/WelcomeScreenVM.dart';
 import 'package:flutter/material.dart';
 
@@ -26,13 +28,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.60,
             child: Center(
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 50),
-                child: Image.asset(
-                  "assets/images/welcome_icon.png",
-                  width: 200,
-                  height: 200,
-                ),
+              child: Image.asset(
+                "assets/images/welcome_icon.png",
+                width: 250,
+                height: 250,
               ),
             ),
           ),
@@ -84,8 +83,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     height: 45,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                        color: AppColor.greenColor,
-                                        border: Border.all(color: AppColor.greenColor),
+                                        color: AppColor.fieldColor,
+                                        border: Border.all(color: AppColor.fieldColor),
                                         borderRadius: BorderRadius.circular(30)),
                                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
                                     child: Row(
@@ -94,12 +93,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       children: [
                                         Image.asset("assets/images/email_icon.png",height: 25,width: 25,),
                                         const SizedBox(width: 15,),
-                                        Common.boldText(Strings.signUpWitheEmail, 16, AppColor.whiteColor,TextAlign.start),
+                                        Common.boldText(Strings.signUpWitheEmail, 16, AppColor.fieldTextColor,TextAlign.start),
                                       ],
                                     ),
                                   ),
                                 ),
-                                InkWell(
+
+                                (Platform.isIOS)?InkWell(
                                   onTap: () {
                                     vm.clickApple(context);
                                   },
@@ -121,10 +121,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                InkWell(
+                                ):const SizedBox(),
+
+                                (Platform.isAndroid)?InkWell(
                                   onTap: () {
-                                    vm.clickGmail(context);
+                                    vm.googleSignup(context);
                                   },
                                   child: Container(
                                     height: 45,
@@ -144,7 +145,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       ],
                                     ),
                                   ),
-                                ),
+                                ): SizedBox(),
+
                                 const SizedBox(height: 20,),
                                 InkWell(
                                   onTap: () {
