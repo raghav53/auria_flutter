@@ -102,18 +102,31 @@ class WelcomeScreenVM with ChangeNotifier{
       social_type = "3";
     }
 
-    Map<String,String> map = {
-      "social_id": uid,
-      "social_type":social_type,
-      "first_name":firstName,
-      "last_name":lastName,
-      "email":email.toString(),
-      "device_type": device_type,
-      "device_token":token,
-    };
-    print("JHIJKHKJ$map");
-    showLoader(context);
-    socialLogin(map,context);
+    if(email.toString() == "null"){
+      Map<String,String> map = {
+        "social_id": uid,
+        "social_type":social_type,
+        "device_type": device_type,
+        "device_token":token,
+      };
+      print("JHIJKHKJ$map");
+      showLoader(context);
+      socialLogin(map,context);
+    }
+    else{
+      Map<String,String> map = {
+        "social_id": uid,
+        "social_type":social_type,
+        "first_name":firstName,
+        "last_name":lastName,
+        "email":email.toString(),
+        "device_type": device_type,
+        "device_token":token,
+      };
+      print("JHIJKHKJ$map");
+      showLoader(context);
+      socialLogin(map,context);
+    }
   }
 
   Future<void> socialLogin(Map<String, String> map, BuildContext context) async {
@@ -126,6 +139,7 @@ class WelcomeScreenVM with ChangeNotifier{
     UserPreference.shared.setUserData(signUpModel);
     UserPreference.shared.setLoggedIn(true);
     hideLoader(context);
+
     if(signUpModel.code == 200){
       srf.setString(AllKeys.auth, signUpModel.body!.authorization.toString());
       srf.setString(AllKeys.userID, signUpModel.body!.id.toString());

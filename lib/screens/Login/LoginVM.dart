@@ -88,18 +88,33 @@ class LoginVM with ChangeNotifier{
       social_type = "3";
     }
 
-    Map<String,String> map = {
-      "social_id": uid,
-      "social_type":social_type,
-      "first_name":firstName,
-      "last_name":lastName,
-      "email":email.toString(),
-      "device_type": device_type,
-      "device_token":token,
-    };
-    print("JHIJKHKJ$map");
-    showLoader(context);
-    socialLogin(map,context);
+    if(email.toString() == "null"){
+      Map<String,String> map = {
+        "social_id": uid,
+        "social_type":social_type,
+        "device_type": device_type,
+        "device_token":token,
+      };
+      print("JHIJKHKJ$map");
+      showLoader(context);
+      socialLogin(map,context);
+    }
+    else{
+      Map<String,String> map = {
+        "social_id": uid,
+        "social_type":social_type,
+        "first_name":firstName,
+        "last_name":lastName,
+        "email":email.toString(),
+        "device_type": device_type,
+        "device_token":token,
+      };
+      print("JHIJKHKJ$map");
+      showLoader(context);
+      socialLogin(map,context);
+    }
+
+
   }
 
   Future<void> socialLogin(Map<String, String> map, BuildContext context) async {
