@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
 import '../../utils/user_preference.dart';
+import '../Home/HomeScreen.dart';
 
 class EditProfileVM with ChangeNotifier{
 
@@ -23,9 +24,14 @@ class EditProfileVM with ChangeNotifier{
 
   getUserInfo(){
 
-    firstName.text = signUpModel.body!.firstName;
-    lastName.text = signUpModel.body!.lastName;
-    email.text = signUpModel.body!.email;
+    if(signUpModel.body!.email.toString() == "null"){
+
+    }else{
+      firstName.text = signUpModel.body!.firstName;
+      lastName.text = signUpModel.body!.lastName;
+      email.text = signUpModel.body!.email;
+    }
+
 
   }
 
@@ -52,7 +58,7 @@ class EditProfileVM with ChangeNotifier{
     }
   }
 
-  Future<void> updateProfile(BuildContext context) async {
+  Future<void> updateProfile(BuildContext context, String from) async {
     showLoader(context);
     Map<String,String> map = {
       "first_name": firstName.text.toString().trim(),
@@ -71,13 +77,13 @@ class EditProfileVM with ChangeNotifier{
     if(commonModel.code == 200){
       showToast(commonModel.message.toString());
 
-      getProfile(context);
+      getProfile(context,from);
     }else{
       showError(commonModel.message.toString());
     }
   }
 
-  Future<void> getProfile(BuildContext context) async {
+  Future<void> getProfile(BuildContext context, String from) async {
     SharedPreferences srf = await SharedPreferences.getInstance();
     String res = await getMethodWithQuery("GET", "${AllKeys.getProfile}?user_id=${srf.getString(AllKeys.userID)}", null, context);
 
@@ -90,7 +96,13 @@ class EditProfileVM with ChangeNotifier{
     FocusScope.of(context).unfocus();
     if(signUpModel.code == 200){
       showToast(signUpModel.message.toString());
-      Navigator.pop(context);
+
+      if(from == "1"){
+        Navigator.pop(context);
+      }else{
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> HomeScreen()), (route) => false);
+      }
+
     }else{
       showError(signUpModel.message.toString());
     }

@@ -1138,7 +1138,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
   Future<void> sendMessage() async {
-    if (vm.chatController.text.isNotEmpty) {
+    if (vm.chatController.text.trim().isNotEmpty) {
       FocusManager.instance.primaryFocus?.unfocus();
       String message = '';
       LocalChatData data = LocalChatData(

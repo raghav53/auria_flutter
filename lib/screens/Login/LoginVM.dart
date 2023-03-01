@@ -16,6 +16,7 @@ import '../../utils/all_keys.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
 import '../../utils/user_preference.dart';
+import '../EditProfile/EditProfileScreen.dart';
 import '../Home/HomeScreen.dart';
 import '../SignUp/SignUpModel.dart';
 
@@ -46,7 +47,6 @@ class LoginVM with ChangeNotifier{
   void clickApple(BuildContext context) {
     platform.invokeMethod('iosAppLogin');
     _appleSignIn(context);
-
   }
 
   Future<void> _appleSignIn(BuildContext context) async {
@@ -119,7 +119,11 @@ class LoginVM with ChangeNotifier{
       srf.setString(AllKeys.userLastName, signUpModel.body!.lastName.toString());
       srf.setString(AllKeys.userEmail, signUpModel.body!.email.toString());
 
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+      if(signUpModel.body!.email.toString() == "null"){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen(from: "0")));
+      }else{
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+      }
 
     }else{
       showError(signUpModel.message.toString());

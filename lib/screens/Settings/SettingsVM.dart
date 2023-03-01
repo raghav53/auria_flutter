@@ -32,7 +32,7 @@ class SettingsVM with ChangeNotifier{
   }
 
   void editClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen(from: "1")));
   }
 
   void changePassClick(BuildContext context) {

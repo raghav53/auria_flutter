@@ -7,7 +7,9 @@ import '../../utils/strings.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const String route = "EditProfileScreenRoute";
-  const EditProfileScreen({Key? key}) : super(key: key);
+  String from;
+
+  EditProfileScreen({Key? key, required this.from}) : super(key: key);
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -225,7 +227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     InkWell(
                                       onTap: () {
                                         if(vm.validation()){
-                                          vm.updateProfile(context);
+                                          vm.updateProfile(context,widget.from);
                                         }
                                       },
                                       child: Container(

@@ -75,10 +75,10 @@ class RouteHelper with Transitions {
             child: const ChatScreen(),
           ),
 
-     EditProfileScreen.route: (_) => ChangeNotifierProvider(
+     /*EditProfileScreen.route: (_) => ChangeNotifierProvider(
             create: (_) => _editProfileViewModel,
             child: const EditProfileScreen(),
-          ),
+          ),*/
 
      FaqScreen.route: (_) => ChangeNotifierProvider(
             create: (_) => _faqsViewModel,

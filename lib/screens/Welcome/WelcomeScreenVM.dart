@@ -15,6 +15,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/user_preference.dart';
+import '../EditProfile/EditProfileScreen.dart';
 import '../SignUp/SignUpModel.dart';
 
 class WelcomeScreenVM with ChangeNotifier{
@@ -132,7 +133,11 @@ class WelcomeScreenVM with ChangeNotifier{
       srf.setString(AllKeys.userLastName, signUpModel.body!.lastName.toString());
       srf.setString(AllKeys.userEmail, signUpModel.body!.email.toString());
 
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+      if(signUpModel.body!.email.toString() == "null"){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen(from: "0")));
+      }else{
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+      }
 
     }else{
       showError(signUpModel.message.toString());
