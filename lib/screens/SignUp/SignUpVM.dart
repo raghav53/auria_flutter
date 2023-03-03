@@ -55,7 +55,7 @@ class SignUpVM with ChangeNotifier{
   }
 
   void signInClick(BuildContext context) {
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const LoginScreen()), (route) => false);
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
   }
 
 

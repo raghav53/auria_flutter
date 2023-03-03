@@ -127,6 +127,7 @@ class LoginVM with ChangeNotifier{
     UserPreference.shared.setUserData(signUpModel);
     UserPreference.shared.setLoggedIn(true);
     hideLoader(context);
+
     if(signUpModel.code == 200){
       srf.setString(AllKeys.auth, signUpModel.body!.authorization.toString());
       srf.setString(AllKeys.userID, signUpModel.body!.id.toString());
@@ -135,13 +136,21 @@ class LoginVM with ChangeNotifier{
       srf.setString(AllKeys.userEmail, signUpModel.body!.email.toString());
 
       if(signUpModel.body!.email.toString() == "null"){
+
         Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen(from: "0")));
+
       }else{
+
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+
       }
 
-    }else{
+    }
+
+    else{
+
       showError(signUpModel.message.toString());
+
     }
   }
 
@@ -151,9 +160,10 @@ class LoginVM with ChangeNotifier{
 
   }
 
-
   void signUpClick(BuildContext context) {
+
     Navigator.pop(context);
+
   }
 
   Future<void> signIn(BuildContext context) async {
@@ -200,6 +210,7 @@ class LoginVM with ChangeNotifier{
   }
 
   void clickForgotPassword(BuildContext context) {
+
     Navigator.push(context, MaterialPageRoute(builder: (context)=>const ForgotPasswordScreen()));
 
   }
