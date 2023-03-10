@@ -1,21 +1,17 @@
-import 'dart:convert';
 import 'package:auria_ai/dialogs/logout/LogoutVM.dart';
 import 'package:auria_ai/utils/color.dart';
 import 'package:flutter/material.dart';
-
-import '../../screens/Login/LoginScreen.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
 
 
 class LogoutConfirmation extends StatefulWidget {
 
-
-  const LogoutConfirmation({Key? key})
-      : super(key: key);
+  const LogoutConfirmation({Key? key}) : super(key: key);
 
   @override
   State<LogoutConfirmation> createState() => _LogoutConfirmation();
+
 }
 
 class _LogoutConfirmation extends State<LogoutConfirmation> {
@@ -25,7 +21,6 @@ class _LogoutConfirmation extends State<LogoutConfirmation> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -48,6 +43,7 @@ class _LogoutConfirmation extends State<LogoutConfirmation> {
         color: Colors.white, //Colors.black.withOpacity(0.3),
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(16.0),
+
         boxShadow: const [
           BoxShadow(
             color: Colors.black26,
@@ -56,7 +52,6 @@ class _LogoutConfirmation extends State<LogoutConfirmation> {
           ),
         ],
       ),
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,// To make the card compact
@@ -129,6 +124,8 @@ class _LogoutConfirmation extends State<LogoutConfirmation> {
 
         ],
       ),
+
     );
   }
+
 }

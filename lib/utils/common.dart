@@ -5,8 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'color.dart';
 
 
-Pattern pattern =
-    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+Pattern pattern = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
     r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
     r"{0,253}[a-zA-Z0-9])?)*$";
 
@@ -40,7 +39,6 @@ class Common{
           color: color),
     );
   }
-
 
   static Widget noInternet(BuildContext context) {
     return Scaffold(
