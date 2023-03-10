@@ -77,8 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: ListView(
                     controller: vm.scrollController,
                     children: (vm.chatArray.isEmpty)
-                        ? [
-                      EmptyChatView(
+                        ? [EmptyChatView(
                         promptTapped: (String str) {
                           if (!vm.isExpired) {
                             vm.chatController.text = str;
@@ -86,8 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           }
                         },
                       )
-                    ]
-                        : getChatList(vm.chatArray),
+                    ] : getChatList(vm.chatArray),
                   )),
 //FOR TRIAL USERS
               if (vm.isSubscribed == 0 && vm.firstLogin && vm.errorMesasge == '')
@@ -1152,7 +1150,6 @@ class _ChatScreenState extends State<ChatScreen> {
       message = vm.chatController.text;
       vm.chatController.text = '';
 
-
       LocalChatData loaderData = LocalChatData(
           isFrom: 'loader',
           humanMesasge: message,
@@ -1173,15 +1170,14 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       });
 
-      var model = await vm.chatWithAI({
-        'chat': 'Human:$message\\n\\Auria:',
-        'category': 'chat',
-        'is_save': '0'
-      }, context);
+      var model = await vm.chatWithAI({'chat': 'Human:$message'}, context);
+
       if (!mounted) {
         return;
       }
+
       vm.chatArray.removeLast();
+
       if (model.success == 1) {
         await playReceiveTone();
         debugPrint('Here i got');
@@ -1204,7 +1200,9 @@ class _ChatScreenState extends State<ChatScreen> {
             });
           });
         });
-      } else {
+      }
+
+      else {
         if ((model.message ?? '').toLowerCase() == 'You have reached your daily word limit'.toLowerCase()){
           vm.errorMesasge = '';
         }else{
@@ -1215,6 +1213,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
         // Utility.shared.showToast('Error', model.message ?? '', context);
       }
+
       getUserData();
 
     }

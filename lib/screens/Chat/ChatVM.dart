@@ -37,7 +37,6 @@ class ChatVM with ChangeNotifier {
   late Timer timer;
   int chatId = 0;
 
-
   void backClick(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context, MaterialPageRoute(builder: (context) => HomeScreen()), (
@@ -47,17 +46,18 @@ class ChatVM with ChangeNotifier {
   //Chat
   Future<ChatModel> chatWithAI(Map<String, String> params,
       BuildContext context) async {
-    var response = await methodWithHeader("POST", AllKeys.aiChat, params, null, context);
+    var response = await methodWithHeader(
+        "POST", AllKeys.aiChat, params, null, context);
     var res = jsonDecode(response);
     return ChatModel.fromJson(res);
   }
 
-
-showSaveDialog(BuildContext context) {
+  showSaveDialog(BuildContext context) {
     showGeneralDialog(
         context: context,
         barrierDismissible: true,
-        barrierLabel: MaterialLocalizations.of(context)
+        barrierLabel: MaterialLocalizations
+            .of(context)
             .modalBarrierDismissLabel,
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 200),
@@ -66,7 +66,10 @@ showSaveDialog(BuildContext context) {
             Animation secondaryAnimation) {
           return Center(
             child: Container(
-              width: MediaQuery.of(context).size.width - 40,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width - 40,
               height: 310,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -77,7 +80,7 @@ showSaveDialog(BuildContext context) {
                   SizedBox(height: 40,),
                   Material(
                     color: Colors.transparent,
-                    child: Text('Save this chat?',style: TextStyle(
+                    child: Text('Save this chat?', style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 18,
                         color: AppColor.textColor
@@ -87,7 +90,8 @@ showSaveDialog(BuildContext context) {
                     padding: const EdgeInsets.all(20.0),
                     child: Material(
                       color: Colors.transparent,
-                      child: Text('Title this conversation so that you can save and access it later.',
+                      child: Text(
+                        'Title this conversation so that you can save and access it later.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -121,7 +125,8 @@ showSaveDialog(BuildContext context) {
                                       color: AppColor.textColor,
                                       fontWeight: FontWeight.w400),
                                   decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(top: 13, bottom: 5),
+                                      contentPadding: EdgeInsets.only(
+                                          top: 13, bottom: 5),
                                       hintText: 'Enter a Title...',
                                       hintStyle: TextStyle(
                                           color: Colors.grey.shade400,
@@ -150,7 +155,7 @@ showSaveDialog(BuildContext context) {
                       )),
                   SizedBox(height: 20,),
                   Container(
-                    margin: const EdgeInsets.only(left: 20,right: 20),
+                    margin: const EdgeInsets.only(left: 20, right: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -162,16 +167,17 @@ showSaveDialog(BuildContext context) {
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                foregroundColor: AppColor.fieldColor, backgroundColor: AppColor.fieldColor,
+                                foregroundColor: AppColor.fieldColor,
+                                backgroundColor: AppColor.fieldColor,
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                   BorderRadius.circular(25), // <-- Radius
                                 ),
                               ),
-                              child:  Text(
+                              child: Text(
                                 Strings.no,
-                                style:  TextStyle(
+                                style: TextStyle(
                                     fontFamily: 'Poppins-Medium',
                                     color: AppColor.fieldTextColor,
                                     fontSize: 17),
@@ -185,14 +191,15 @@ showSaveDialog(BuildContext context) {
 
                               },
                               style: ElevatedButton.styleFrom(
-                                foregroundColor: AppColor.greenColor, backgroundColor: AppColor.greenColor,
+                                foregroundColor: AppColor.greenColor,
+                                backgroundColor: AppColor.greenColor,
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                   BorderRadius.circular(25), // <-- Radius
                                 ),
                               ),
-                              child:  Text(
+                              child: Text(
                                 Strings.yes,
                                 style: const TextStyle(
                                     fontFamily: 'Poppins-Medium',
@@ -216,13 +223,18 @@ showSaveDialog(BuildContext context) {
   int daysBetween(DateTime from, DateTime to) {
     from = DateTime(from.year, from.month, from.day);
     to = DateTime(to.year, to.month, to.day);
-    return (to.difference(from).inHours / 24).round();
+    return (to
+        .difference(from)
+        .inHours / 24).round();
   }
+
 //API Implementation
 
   Future<SignUpModel> getProfile(BuildContext context) async {
     SharedPreferences srf = await SharedPreferences.getInstance();
-    String res = await getMethodWithQuery("GET", "${AllKeys.getProfile}?user_id=${srf.getString(AllKeys.userID)}", null, context);
+    String res = await getMethodWithQuery(
+        "GET", "${AllKeys.getProfile}?user_id=${srf.getString(AllKeys.userID)}",
+        null, context);
 
     var response = jsonDecode(res);
 
