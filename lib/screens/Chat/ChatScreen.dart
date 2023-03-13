@@ -15,8 +15,8 @@ import 'chat_loader.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String route = "ChatScreenRoute";
-
-  const ChatScreen({Key? key}) : super(key: key);
+  String prompt,description;
+  ChatScreen({Key? key, required this.prompt, required this.description}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -80,11 +80,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         ? [EmptyChatView(
                         promptTapped: (String str) {
                           if (!vm.isExpired) {
-                            vm.chatController.text = str;
+                            vm.chatController.text = widget.description;
                             // vm.sendMessage();
                           }
-                        },
-                      )
+                        },desc:widget.description)
                     ] : getChatList(vm.chatArray),
                   )),
 //FOR TRIAL USERS
@@ -1170,7 +1169,14 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       });
 
-      var model = await vm.chatWithAI({'chat': 'Human:$message'}, context);
+      print("description_______________${widget.description}");
+      var model;
+      if(message == widget.description.toString()){
+        model = await vm.chatWithAI({'chat': 'Human:$message\\n\\nAuria:'}, context);
+      }else{
+       model = await vm.chatWithAI({'chat': '${widget.prompt}\\n\\nHuman:$message\\n\\nAuria:'}, context);
+
+      }
 
       if (!mounted) {
         return;

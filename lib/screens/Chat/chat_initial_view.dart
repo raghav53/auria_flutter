@@ -6,7 +6,8 @@ import '../../utils/color.dart';
 
 class EmptyChatView extends StatefulWidget {
   final Function(String str) promptTapped;
-  const EmptyChatView({Key? key, required this.promptTapped}) : super(key: key);
+  String desc;
+  EmptyChatView({Key? key, required this.promptTapped, required this.desc}) : super(key: key);
 
   @override
   State<EmptyChatView> createState() => _EmptyChatViewState();
@@ -26,7 +27,7 @@ class _EmptyChatViewState extends State<EmptyChatView> {
         InkWell(
           onTap: (){
             debugPrint('Prompt Tapped========>');
-            widget.promptTapped("Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis.");
+            widget.promptTapped(widget.desc);
           },
           child: Container(
             width: double.infinity,
@@ -36,10 +37,10 @@ class _EmptyChatViewState extends State<EmptyChatView> {
               color: AppColor.fieldColor,
               borderRadius: BorderRadius.circular(10)
             ),
-            child: Common.mediumText("Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis.", 14, AppColor.fieldTextColor, TextAlign.center),
+            child: Common.mediumText(widget.desc, 14, AppColor.fieldTextColor, TextAlign.center),
           ),
         ),
-        const SizedBox(height: 20,),
+      /*  const SizedBox(height: 20,),
         Image.asset('assets/images/limitatuin_icon.png',width: 20,),
         const SizedBox(height: 5,),
         Common.mediumText('Limitations', 15, AppColor.textColor, TextAlign.center),
@@ -62,7 +63,7 @@ class _EmptyChatViewState extends State<EmptyChatView> {
               borderRadius: BorderRadius.circular(10)
           ),
           child: Common.mediumText("Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis.", 14, AppColor.fieldTextColor, TextAlign.center),
-        )
+        )*/
       ],
     );
   }

@@ -1,12 +1,14 @@
 import 'package:auria_ai/screens/Home/HomeVM.dart';
+import 'package:auria_ai/utils/all_keys.dart';
 import 'package:auria_ai/utils/color.dart';
 import 'package:auria_ai/utils/common.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/strings.dart';
 
 class MainDrawer extends StatelessWidget {
 
-  MainDrawer({Key? key}) : super(key: key);
+  MainDrawer({Key? key,}) : super(key: key);
 
   var vm = HomeVM();
 
@@ -66,8 +68,12 @@ class MainDrawer extends StatelessWidget {
                   context: context,
                   title: Strings.newChat,
                   icon: 'assets/images/new_chat_icon.png',
-                  onPressed: () {
-                    vm.newChatClick(context);
+                  onPressed: () async {
+
+                    SharedPreferences srf = await SharedPreferences.getInstance();
+
+                    vm.newChatClick(context,srf.getString(AllKeys.newChatProm).toString(),srf.getString(AllKeys.newChatDesc).toString());
+
                   }),
               _customListTile(
                   context: context,

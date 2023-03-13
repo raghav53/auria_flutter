@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:auria_ai/screens/Home/CategoryModel.dart';
 import 'package:auria_ai/screens/Home/HomeVM.dart';
+import 'package:auria_ai/utils/all_keys.dart';
 import 'package:flutter/material.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
@@ -18,6 +22,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var vm = HomeVM();
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    init();
+
+  }
+
+  Future<void> init() async {
+
+    var categorys = await vm.getCategory(context);
+
+    if(categorys.body != null){
+      setState(() {
+
+      });
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -138,7 +162,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Flexible(child: categoryList()),
+                    Flexible(child: (vm.categoryPojo.body != null)?categoryList():Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),),
                   ],
                 ),
               ),
@@ -154,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GridView.builder(
       padding: EdgeInsets.zero,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 15, mainAxisSpacing: 15),
-      itemCount: vm.listImages.length,
+      itemCount: vm.categoryPojo.body!.length,
       itemBuilder: (BuildContext context, int index) {
         return ChoiceChip(
           backgroundColor: AppColor.fieldColor,
@@ -169,8 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(
-                    vm.listImages[index].toString(),
+                  Image.network(
+                    AllKeys.imageUrl+vm.categoryPojo.body![index].icon.toString(),
                     height: 40,
                     width: 40,
                     color: AppColor.fieldTextColor,
@@ -179,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   Text(
-                    vm.listTitles[index].toString(),
+                    vm.categoryPojo.body![index].title.toString(),
                     style: TextStyle(
                       fontFamily: "Outfit-reg",
                       fontSize: 14,
@@ -193,11 +221,13 @@ class _HomeScreenState extends State<HomeScreen> {
           selected: (vm.choise == vm.listTitles[index].toString()) ? true : false,
           selectedColor: AppColor.fieldColor,
           onSelected: (bool value) {
-            vm.newChatClick(context);
+            vm.newChatClick(context,vm.categoryPojo.body![index].prompt.toString(),vm.categoryPojo.body![index].description.toString());
           },
         );
       },
     );
   }
+
+
 
 }
