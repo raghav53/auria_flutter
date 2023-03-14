@@ -1,6 +1,8 @@
 
 class AllKeys{
 
+
+  static var imageUrl = "http://3.227.175.32:5544/images/";
   //--------------------------------------------Api Keys--------------------------------
 
   static var signup = "signup";
@@ -13,6 +15,7 @@ class AllKeys{
   static var changePassword = "change-password";
   static var getFaqs = "get-faqs";
   static var aiChat = "aiChat";
+  static var getCategory = "get-category";
 
   //--------------------------------------------SharedPreferences Keys-------------------
 
@@ -21,5 +24,7 @@ class AllKeys{
   static String userFirstName = "userFirstName";
   static String userLastName = "userLastName";
   static String userEmail = "email";
+  static String newChatDesc = "newChatDesc";
+  static String newChatProm = "newChatProm";
 
 }

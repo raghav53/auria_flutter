@@ -43,7 +43,6 @@ class ChatVM with ChangeNotifier {
         route) => false);
   }
 
-  //Chat
   Future<ChatModel> chatWithAI(Map<String, String> params,
       BuildContext context) async {
     var response = await methodWithHeader(

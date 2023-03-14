@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:auria_ai/screens/Home/CategoryModel.dart';
 import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:auria_ai/screens/SaveChat/SaveChatScreen.dart';
 import 'package:auria_ai/screens/Settings/SettingsScreen.dart';
@@ -22,6 +23,7 @@ class HomeVM with ChangeNotifier{
   List<String> listImages = ['assets/images/mess_icon.png','assets/images/translate_icon.png','assets/images/search_icon.png','assets/images/history_icon_cat.png','assets/images/command_icon.png','assets/images/sql_icon.png'];
   List<String> listTitles = ['New Chat','Translate','Discover','History','Command','SQL'];
   String choise = '';
+  CategoryPojo categoryPojo = CategoryPojo();
 
   String firstAndLast(){
     var firstname = signUpModel.body!.firstName.toString();
@@ -43,9 +45,8 @@ class HomeVM with ChangeNotifier{
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  void newChatClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen()));
-
+  void newChatClick(BuildContext context, String prompt, String description) {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(prompt:prompt,description:description)));
   }
 
   void saveChatClick(BuildContext context) {
@@ -69,5 +70,19 @@ class HomeVM with ChangeNotifier{
     );
   }
 
+
+  Future<CategoryPojo> getCategory(BuildContext context) async {
+
+    String res = await getMethodWithQuery("GET", AllKeys.getCategory, null, context);
+
+    var response = jsonDecode(res);
+
+    categoryPojo = CategoryPojo.fromJson(response);
+    SharedPreferences srf = await SharedPreferences.getInstance();
+
+    srf.setString(AllKeys.newChatProm, categoryPojo.body![0].prompt.toString());
+    srf.setString(AllKeys.newChatDesc, categoryPojo.body![0].description.toString());
+    return categoryPojo;
+  }
 
 }

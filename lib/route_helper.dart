@@ -35,8 +35,6 @@ class RouteHelper with Transitions {
   final _loginViewModel = LoginVM();
   final _homeViewModel = HomeVM();
   final _changePasswordViewModel = ChangePasswordVM();
-  final _chatViewModel = ChatVM();
-  final _editProfileViewModel = EditProfileVM();
   final _faqsViewModel = FaqVM();
   final _forgotPasswordViewModel = ForgotPasswordVM();
   final _savedViewModel = SaveChatVM();
@@ -70,10 +68,10 @@ class RouteHelper with Transitions {
             child: const ChangePasswordScreen(),
           ),
 
-     ChatScreen.route: (_) => ChangeNotifierProvider(
+    /* ChatScreen.route: (_) => ChangeNotifierProvider(
             create: (_) => _chatViewModel,
             child: const ChatScreen(),
-          ),
+          ),*/
 
      /*EditProfileScreen.route: (_) => ChangeNotifierProvider(
             create: (_) => _editProfileViewModel,
