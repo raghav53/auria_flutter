@@ -82,6 +82,7 @@ class HomeVM with ChangeNotifier{
 
     srf.setString(AllKeys.newChatProm, categoryPojo.body![0].prompt.toString());
     srf.setString(AllKeys.newChatDesc, categoryPojo.body![0].description.toString());
+
     return categoryPojo;
   }
 

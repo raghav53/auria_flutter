@@ -58,8 +58,7 @@ Future<String> methodWithHeader(String method, String url, Map<String, String>? 
   }
   if (imageParams != null) {
     imageParams.forEach((key, value) async {
-      request.files.add(
-          await http.MultipartFile.fromPath(key.split(key_splite)[0], value));
+      request.files.add(await http.MultipartFile.fromPath(key.split(key_splite)[0], value));
     });
   }
 

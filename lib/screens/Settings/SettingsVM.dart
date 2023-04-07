@@ -40,16 +40,16 @@ class SettingsVM with ChangeNotifier{
   }
 
   Future<void> termsClick(BuildContext context) async {
-    if (await canLaunch('http://3.227.175.32:5544/apis/terms')) {
-    await launch('http://3.227.175.32:5544/apis/terms');
+    if (await canLaunch('https://auria-ai.webflow.io/terms')) {
+    await launch('https://auria-ai.webflow.io/terms');
     } else {
     throw 'Could not launch';
     }
   }
 
   Future<void> privacyClick(BuildContext context) async {
-    if (await canLaunch('http://3.227.175.32:5544/apis/privacy')) {
-    await launch('http://3.227.175.32:5544/apis/privacy');
+    if (await canLaunch('https://auria-ai.webflow.io/privacy')) {
+    await launch('https://auria-ai.webflow.io/privacy');
     } else {
     throw 'Could not launch';
     }
