@@ -47,10 +47,10 @@ dependencies:
   flutter_local_notifications: ^9.1.2
   firebase_auth: ^4.2.5
   google_sign_in: ^5.4.4
-  in_app_purchase: ^3.1.1
   foundation_flutter: ^0.2.0
   loading_animation_widget: ^1.2.0+4
   just_audio: ^0.9.31
+  in_app_purchase: ^3.1.5
 
 dev_dependencies:
   flutter_test:

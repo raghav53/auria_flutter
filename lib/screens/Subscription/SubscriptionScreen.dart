@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:auria_ai/screens/Subscription/SubscriptionVM.dart';
+import 'package:auria_ai/screens/Subscription/subscriptions_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
+import '../Home/HomeScreen.dart';
+import 'AppleSubscriptionModel.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   static const String route = "SubscriptionScreenRoute";
@@ -227,7 +234,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             SizedBox(height: 40,),
             InkWell(
               onTap: () {
-                vm.subscribeClick(context);
+                if(vm.checkPlan == 0){
+                  showError("Please select plan");
+                }else{
+                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
+                  performPayment(context);
+                }
               },
               child: Container(
                 height: 45,
@@ -251,5 +263,70 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         ),
       ),
     );
+  }
+
+
+
+  performPayment(BuildContext context) async {
+    if (defaultTargetPlatform == TargetPlatform.iOS){
+      // Loader.show(context,
+      //   isSafeAreaOverlay: false,
+      //   isBottomBarOverlay: false,
+      //   overlayFromBottom: 0,
+      //   overlayColor: Colors.black12,
+      //   progressIndicator: CircularProgressIndicator(backgroundColor: AppColor.greenColor,color: AppColor.greenColor,),
+      // );
+    }
+
+    ProductDetails productToBuy;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      if (vm.checkPlan == 0) {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.iMonthlyId);
+        productToBuy = vm.productList.elementAt(index);
+      } else {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.iWeeklyId);
+        productToBuy = vm.productList.elementAt(index);
+      }
+    }else{
+      if (vm.checkPlan == 0) {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.gMonthlyId);
+        productToBuy = vm.productList.elementAt(index);
+      } else {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.gWeeklyId);
+        productToBuy = vm.productList.elementAt(index);
+      }
+    }
+    await SubscriptionsProvider.instance.buySubscription(productToBuy, (PurchaseDetails details) async {
+      var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':(vm.checkPlan == 0)?
+      '17.99':'4.99','type':(vm.checkPlan == 0)?'1':'0','json_data':details.verificationData.serverVerificationData}, context);
+      if (!mounted){ return;}
+      if (anyModel.success == 1){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
+      }else{
+        showToast(anyModel.message ?? '');
+      }
+    });
+  }
+
+  Future<void> onApplePayResult(paymentResult) async {
+    debugPrint('Token==========>${paymentResult['token']}');
+    var response = jsonDecode(paymentResult['token']);
+    AppleSubscriptionModel model = AppleSubscriptionModel.fromJson(response);
+    var anyModel = await vm.subscription({'transaction_id':model.header?.transactionId ?? '','amount':(vm.checkPlan == 0)?
+    '17.99':'4.99','type':(vm.checkPlan == 0)?'1':'0','json_data':paymentResult['token']}, context);
+    if (!mounted){ return;}
+    if (anyModel.success == 1){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
+    }else{
+      showToast(anyModel.message ?? '');
+    }
+  }
+
+  void onGooglePayResult(paymentResult) {
+    debugPrint(paymentResult.toString());
   }
 }

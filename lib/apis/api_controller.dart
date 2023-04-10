@@ -17,8 +17,12 @@ var token = "qwe";
 
 //---------------------------------Post Method----------------------------------
 
-Future<String> postMethod(String method, String url, Map<String, String>? fieldsParams, Map<String, String>? imageParams, BuildContext context) async {
-
+Future<String> postMethod(
+    String method,
+    String url,
+    Map<String, String>? fieldsParams,
+    Map<String, String>? imageParams,
+    BuildContext context) async {
   Map<String, String> headers = <String, String>{
     "Accept": "application/json",
     "security_key": password,
@@ -42,7 +46,12 @@ Future<String> postMethod(String method, String url, Map<String, String>? fields
   return await streamedRequest.stream.bytesToString();
 }
 
-Future<String> methodWithHeader(String method, String url, Map<String, String>? fieldsParams, Map<String, String>? imageParams, BuildContext context) async {
+Future<String> methodWithHeader(
+    String method,
+    String url,
+    Map<String, String>? fieldsParams,
+    Map<String, String>? imageParams,
+    BuildContext context) async {
   SharedPreferences srf = await SharedPreferences.getInstance();
 
   print("TOKEN_____${srf.getString(AllKeys.auth)}");
@@ -58,7 +67,8 @@ Future<String> methodWithHeader(String method, String url, Map<String, String>? 
   }
   if (imageParams != null) {
     imageParams.forEach((key, value) async {
-      request.files.add(await http.MultipartFile.fromPath(key.split(key_splite)[0], value));
+      request.files.add(
+          await http.MultipartFile.fromPath(key.split(key_splite)[0], value));
     });
   }
 
@@ -81,8 +91,8 @@ Future<String> methodWithHeader(String method, String url, Map<String, String>? 
 
 //---------------------------------Get Method-----------------------------------
 
-Future<String> getMethodWithQuery(String method, String endUrl, Map<String, String>? params, BuildContext context) async
-{
+Future<String> getMethodWithQuery(String method, String endUrl,
+    Map<String, String>? params, BuildContext context) async {
   SharedPreferences srf = await SharedPreferences.getInstance();
   Map<String, String> headers = <String, String>{
     "Accept": "application/json",
