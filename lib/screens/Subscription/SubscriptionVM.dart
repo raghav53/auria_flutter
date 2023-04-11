@@ -15,16 +15,14 @@ class SubscriptionVM with ChangeNotifier{
   var checkPlan = 0;
 
   List<ProductDetails> productList = [];
-  final gWeeklyId = 'auria_ai_weekly_sub';
-  final gMonthlyId = 'auria_ai_monthly_sub';
-  final gYearlyId = 'auria_ai_yearly_sub';
+  final gWeeklyId = 'auria_new_weekly';
+  final gMonthlyId = 'auria_new_monthly';
+  final gYearlyId = 'auria_new_yearly';
 
   final iWeeklyId = 'auria-weekly-sub';
   final iMonthlyId = 'auria-monthly-sub';
   final iYearlyId = 'auria-yearly-sub';
 
-  final List<String> iosProductIds = ['auria_ai_weekly_sub','auria_ai_monthly_sub','auria_ai_yearly_sub'];
-  final List<String> googleProductIds = ['auria-weekly-sub','auria-monthly-sub','auria-yearly-sub'];
 
   static SubscriptionVM instance = SubscriptionVM();
 
@@ -35,7 +33,6 @@ class SubscriptionVM with ChangeNotifier{
   void plansClick(int i) {
     checkPlan = i;
   }
-
 
   Future<List<ProductDetails>> fetchSubscriptions() async {
     final bool available = await InAppPurchase.instance.isAvailable();
@@ -53,7 +50,7 @@ class SubscriptionVM with ChangeNotifier{
     };
 
     const Set<String> _androidSubscriptionIds = <String>{
-      'auria-weekly-sub','auria-monthly-sub','auria-yearly-sub'
+      'auria_new_weekly','auria_new_monthly','auria_new_yearly'
     };
 
     final ProductDetailsResponse response = await InAppPurchase.instance.queryProductDetails((defaultTargetPlatform == TargetPlatform.iOS)

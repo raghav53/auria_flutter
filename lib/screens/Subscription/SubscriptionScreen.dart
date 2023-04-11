@@ -38,7 +38,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,7 +61,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           ),
         ),
 
-        body: Stack(
+        body: (vm.productList.length != 0) ?Stack(
           children: [
             Container(
               alignment: Alignment.topRight,
@@ -85,6 +84,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               ],
             ),
           ],
+        ):const Center(
+          child: CircularProgressIndicator(),
         ),
 
       ),
@@ -106,7 +107,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            InkWell(
+
+           /* InkWell(
               onTap: (){
                 setState(() {
                   vm.plansClick(1);
@@ -135,7 +137,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ],
                 ),
               ),
-            ),
+            ),*/
 
             InkWell(
               onTap: (){
@@ -159,7 +161,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.weekly, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText('\$5.90/week', 17, AppColor.textColor, TextAlign.start)
+                        Common.mediumText('${vm.productList[1].price}/week', 17, AppColor.textColor, TextAlign.start)
                       ],
                     ),
                     Image.asset((vm.checkPlan == 2)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -191,7 +193,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.monthly, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText("\$10.10/month", 17, AppColor.textColor, TextAlign.start)
+                        Common.mediumText("${vm.productList[0].price}/month", 17, AppColor.textColor, TextAlign.start)
                       ],
                     ),
                     Image.asset((vm.checkPlan == 3)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -222,7 +224,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.yearly, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText("\$100/year", 17, AppColor.textColor, TextAlign.start)
+                        Common.mediumText("${vm.productList[2].price}/year", 17, AppColor.textColor, TextAlign.start)
                       ],
                     ),
                     Image.asset((vm.checkPlan == 4)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -265,20 +267,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 
-
-
   performPayment(BuildContext context) async {
     if (defaultTargetPlatform == TargetPlatform.iOS){
-      // Loader.show(context,
-      //   isSafeAreaOverlay: false,
-      //   isBottomBarOverlay: false,
-      //   overlayFromBottom: 0,
-      //   overlayColor: Colors.black12,
-      //   progressIndicator: CircularProgressIndicator(backgroundColor: AppColor.greenColor,color: AppColor.greenColor,),
-      // );
+
     }
 
-    ProductDetails productToBuy;
+    ProductDetails? productToBuy;
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       if (vm.checkPlan == 0) {
         var index = vm.productList.indexWhere((element) =>
@@ -290,19 +284,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         productToBuy = vm.productList.elementAt(index);
       }
     }else{
-      if (vm.checkPlan == 0) {
-        var index = vm.productList.indexWhere((element) =>
-        element.id == vm.gMonthlyId);
-        productToBuy = vm.productList.elementAt(index);
-      } else {
+      if (vm.checkPlan == 2) {
         var index = vm.productList.indexWhere((element) =>
         element.id == vm.gWeeklyId);
         productToBuy = vm.productList.elementAt(index);
+      } else if(vm.checkPlan == 3) {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.gMonthlyId);
+        productToBuy = vm.productList.elementAt(index);
+      } else if(vm.checkPlan == 4) {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.gYearlyId);
+        productToBuy = vm.productList.elementAt(index);
       }
     }
-    await SubscriptionsProvider.instance.buySubscription(productToBuy, (PurchaseDetails details) async {
-      var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':(vm.checkPlan == 0)?
-      '17.99':'4.99','type':(vm.checkPlan == 0)?'1':'0','json_data':details.verificationData.serverVerificationData}, context);
+    await SubscriptionsProvider.instance.buySubscription(productToBuy!, (PurchaseDetails details) async {
+      var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 0)?'1':'0','json_data':details.verificationData.serverVerificationData}, context);
       if (!mounted){ return;}
       if (anyModel.success == 1){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
@@ -317,7 +314,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     var response = jsonDecode(paymentResult['token']);
     AppleSubscriptionModel model = AppleSubscriptionModel.fromJson(response);
     var anyModel = await vm.subscription({'transaction_id':model.header?.transactionId ?? '','amount':(vm.checkPlan == 0)?
-    '17.99':'4.99','type':(vm.checkPlan == 0)?'1':'0','json_data':paymentResult['token']}, context);
+    '17.99':'4.99','type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':paymentResult['token']}, context);
     if (!mounted){ return;}
     if (anyModel.success == 1){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
@@ -329,4 +326,5 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   void onGooglePayResult(paymentResult) {
     debugPrint(paymentResult.toString());
   }
+
 }
