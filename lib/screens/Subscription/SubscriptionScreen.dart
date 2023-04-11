@@ -299,7 +299,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       }
     }
     await SubscriptionsProvider.instance.buySubscription(productToBuy!, (PurchaseDetails details) async {
-      var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 0)?'1':'0','json_data':details.verificationData.serverVerificationData}, context);
+      var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':details.verificationData.serverVerificationData}, context);
       if (!mounted){ return;}
       if (anyModel.success == 1){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
