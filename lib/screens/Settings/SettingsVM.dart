@@ -7,60 +7,64 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../apis/api_controller.dart';
 import '../ChangePassword/ChangePasswordScreen.dart';
 
-class SettingsVM with ChangeNotifier{
-
-  String firstAndLast(){
+class SettingsVM with ChangeNotifier {
+  String firstAndLast() {
     var firstname = signUpModel.body!.firstName.toString();
     var lastname = signUpModel.body!.lastName.toString();
     return "${firstname[0]}${lastname[0]}";
   }
 
-  String firstName(){
+  String firstName() {
     return signUpModel.body!.firstName.toString();
   }
 
-  String lastName(){
+  String lastName() {
     return signUpModel.body!.lastName.toString();
   }
 
-  String emailID(){
+  String emailID() {
     return signUpModel.body!.email.toString();
   }
 
   void backClick(BuildContext context) {
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (route) => false);
   }
 
   void editClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen(from: "1")));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => EditProfileScreen(from: "1")));
   }
 
   void changePassClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> ChangePasswordScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
   }
 
   Future<void> termsClick(BuildContext context) async {
     if (await canLaunch('https://auria-ai.webflow.io/terms')) {
-    await launch('https://auria-ai.webflow.io/terms');
+      await launch('https://auria-ai.webflow.io/terms');
     } else {
-    throw 'Could not launch';
+      throw 'Could not launch';
     }
   }
 
   Future<void> privacyClick(BuildContext context) async {
     if (await canLaunch('https://auria-ai.webflow.io/privacy')) {
-    await launch('https://auria-ai.webflow.io/privacy');
+      await launch('https://auria-ai.webflow.io/privacy');
     } else {
-    throw 'Could not launch';
+      throw 'Could not launch';
     }
   }
-  
+
   void faqClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> FaqScreen()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FaqScreen()));
   }
 
   void upgradeClick(BuildContext context) {}
 
   void shareClick(BuildContext context) {}
-
 }

@@ -1,20 +1,27 @@
 
-import 'package:auria_ai/screens/Subscription/CardInfo/CardInfoScreen.dart';
-import 'package:auria_ai/utils/common.dart';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../../apis/api_controller.dart';
 import '../Home/HomeScreen.dart';
+import 'AnyModel.dart';
 
 class SubscriptionVM with ChangeNotifier{
 
   var checkPlan = 0;
 
   List<ProductDetails> productList = [];
-  final List<String> iosProductIds = ['com.jarvis.weekly','com.jarvis.monthly','com.jarvis.yearly'];
-  final List<String> googleProductIds = ['com_jarvis_weekly','com_jarvis_monthly','com_jarvis_yearly'];
+  final gWeeklyId = 'auria_new_weekly';
+  final gMonthlyId = 'auria_new_monthly';
+  final gYearlyId = 'auria_new_yearly';
+
+  final iWeeklyId = 'auria-weekly-sub';
+  final iMonthlyId = 'auria-monthly-sub';
+  final iYearlyId = 'auria-yearly-sub';
 
 
   static SubscriptionVM instance = SubscriptionVM();
@@ -26,15 +33,6 @@ class SubscriptionVM with ChangeNotifier{
   void plansClick(int i) {
     checkPlan = i;
   }
-
-  void subscribeClick(BuildContext context) {
-    if(checkPlan == 0){
-      showError("Please select plan");
-    }else{
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
-    }
-  }
-
 
   Future<List<ProductDetails>> fetchSubscriptions() async {
     final bool available = await InAppPurchase.instance.isAvailable();
@@ -48,17 +46,16 @@ class SubscriptionVM with ChangeNotifier{
     }
 
     const Set<String> _iosSubscriptionIds = <String>{
-      'com.jarvis.weekly','com.jarvis.monthly','com.jarvis.yearly'
+      'auria_ai_weekly_sub','auria_ai_monthly_sub','auria_ai_yearly_sub'
     };
 
     const Set<String> _androidSubscriptionIds = <String>{
-      'com_jarvis_weekly','com_jarvis_monthly','com_jarvis_yearly'
+      'auria_new_weekly','auria_new_monthly','auria_new_yearly'
     };
 
-    final ProductDetailsResponse response = await InAppPurchase.instance
-        .queryProductDetails((defaultTargetPlatform == TargetPlatform.iOS)
+    final ProductDetailsResponse response = await InAppPurchase.instance.queryProductDetails((defaultTargetPlatform == TargetPlatform.iOS)
         ? _iosSubscriptionIds
-        : _androidSubscriptionIds);
+        : _androidSubscriptionIds,);
 
     if (response.notFoundIDs.isNotEmpty) {
       debugPrint('No Products Found');
@@ -75,5 +72,14 @@ class SubscriptionVM with ChangeNotifier{
     notifyListeners();
     return products;
   }
+
+  //Subscription
+  Future<AnyModel> subscription(Map<String,String> params,BuildContext context) async {
+    var response = await postMethod("POST", "subscription", params, null, context);
+    var res = jsonDecode(response);
+    return AnyModel.fromJson(res);
+  }
+
+
 
 }
