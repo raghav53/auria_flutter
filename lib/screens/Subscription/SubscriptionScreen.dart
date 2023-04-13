@@ -283,7 +283,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         element.id == vm.iWeeklyId);
         productToBuy = vm.productList.elementAt(index);
       }
-    }else{
+    }
+    else{
       if (vm.checkPlan == 2) {
         var index = vm.productList.indexWhere((element) =>
         element.id == vm.gWeeklyId);
