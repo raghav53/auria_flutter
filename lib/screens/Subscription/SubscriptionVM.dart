@@ -19,9 +19,9 @@ class SubscriptionVM with ChangeNotifier{
   final gMonthlyId = 'auria_new_monthly';
   final gYearlyId = 'auria_new_yearly';
 
-  final iWeeklyId = 'auria-weekly-sub';
-  final iMonthlyId = 'auria-monthly-sub';
-  final iYearlyId = 'auria-yearly-sub';
+  final iWeeklyId = 'auria_ai_weekly_sub';
+  final iMonthlyId = 'auria_ai_monthly_sub';
+  final iYearlyId = 'auria_ai_yearly_sub';
 
 
   static SubscriptionVM instance = SubscriptionVM();
@@ -54,9 +54,10 @@ class SubscriptionVM with ChangeNotifier{
     };
 
     final ProductDetailsResponse response = await InAppPurchase.instance.queryProductDetails((defaultTargetPlatform == TargetPlatform.iOS)
-        ? _iosSubscriptionIds
+        ? {'auria_ai_weekly_sub','auria_ai_monthly_sub','auria_ai_yearly_sub'}
         : _androidSubscriptionIds,);
 
+    debugPrint('${_iosSubscriptionIds.first}');
     if (response.notFoundIDs.isNotEmpty) {
       debugPrint('No Products Found');
       if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -67,7 +68,7 @@ class SubscriptionVM with ChangeNotifier{
 
     // all existing product are inside the productDetails.
     List<ProductDetails> products = response.productDetails;
-
+    debugPrint('${products.first}');
     // Store the subscription and notify all listeners
     notifyListeners();
     return products;
