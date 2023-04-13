@@ -274,13 +274,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
     ProductDetails? productToBuy;
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      if (vm.checkPlan == 0) {
+      if (vm.checkPlan == 2) {
+        var index = vm.productList.indexWhere((element) =>
+        element.id == vm.iWeeklyId);
+        productToBuy = vm.productList.elementAt(index);
+      } else if(vm.checkPlan == 3) {
         var index = vm.productList.indexWhere((element) =>
         element.id == vm.iMonthlyId);
         productToBuy = vm.productList.elementAt(index);
-      } else {
+      } else if(vm.checkPlan == 4) {
         var index = vm.productList.indexWhere((element) =>
-        element.id == vm.iWeeklyId);
+        element.id == vm.iYearlyId);
         productToBuy = vm.productList.elementAt(index);
       }
     }
@@ -299,6 +303,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         productToBuy = vm.productList.elementAt(index);
       }
     }
+
     await SubscriptionsProvider.instance.buySubscription(productToBuy!, (PurchaseDetails details) async {
       var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':details.verificationData.serverVerificationData}, context);
       if (!mounted){ return;}
@@ -308,24 +313,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         showToast(anyModel.message ?? '');
       }
     });
-  }
-
-  Future<void> onApplePayResult(paymentResult) async {
-    debugPrint('Token==========>${paymentResult['token']}');
-    var response = jsonDecode(paymentResult['token']);
-    AppleSubscriptionModel model = AppleSubscriptionModel.fromJson(response);
-    var anyModel = await vm.subscription({'transaction_id':model.header?.transactionId ?? '','amount':(vm.checkPlan == 0)?
-    '17.99':'4.99','type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':paymentResult['token']}, context);
-    if (!mounted){ return;}
-    if (anyModel.success == 1){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
-    }else{
-      showToast(anyModel.message ?? '');
-    }
-  }
-
-  void onGooglePayResult(paymentResult) {
-    debugPrint(paymentResult.toString());
   }
 
 }
