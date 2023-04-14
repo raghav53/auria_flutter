@@ -108,7 +108,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         child: Column(
           children: [
 
-           /* InkWell(
+            InkWell(
               onTap: (){
                 setState(() {
                   vm.plansClick(1);
@@ -137,7 +137,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ],
                 ),
               ),
-            ),*/
+            ),
 
             InkWell(
               onTap: (){
@@ -238,6 +238,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               onTap: () {
                 if(vm.checkPlan == 0){
                   showError("Please select plan");
+                }else if(vm.checkPlan == 1){
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
                 }else{
                   // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
                   performPayment(context);
