@@ -84,10 +84,35 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               ],
             ),
           ],
-        ):const Center(
+        ):
+        const Center(
           child: CircularProgressIndicator(),
         ),
-
+        bottomNavigationBar:  Container(
+          color: AppColor.whiteColor,
+          child: InkWell(
+            onTap: () {
+              if(vm.checkPlan == 0){
+                showError("Please select plan");
+              }else if(vm.checkPlan == 1){
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+              }else{
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
+                performPayment(context);
+              }
+            },
+            child: Container(
+              height: 45,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: AppColor.greenColor,
+                  border: Border.all(color: AppColor.greenColor),
+                  borderRadius: BorderRadius.circular(30)),
+              margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+              child: Common.boldText(Strings.subscribe, 16, AppColor.whiteColor,TextAlign.start),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -146,6 +171,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 });
               },
               child: Container(
+                width: double.infinity,
                 margin: const EdgeInsets.only(top: 10,bottom: 5),
                 decoration: BoxDecoration(
                     color: AppColor.whiteColor,
@@ -161,7 +187,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.weekly, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText('${vm.productList[1].price}/week', 17, AppColor.textColor, TextAlign.start)
+                        Common.mediumText('${vm.productList[1].price}/week', 17, AppColor.textColor, TextAlign.start),
+                        const SizedBox(height: 5,),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.60,
+                            child: Common.commonText(Strings.weeklyDetail, 17, AppColor.fieldTextColor, TextAlign.start)),
+
                       ],
                     ),
                     Image.asset((vm.checkPlan == 2)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -193,7 +224,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.monthly, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText("${vm.productList[0].price}/month", 17, AppColor.textColor, TextAlign.start)
+                        Common.mediumText("${vm.productList[0].price}/month", 17, AppColor.textColor, TextAlign.start),
+                        const SizedBox(height: 5,),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width*0.60,
+                            child: Common.commonText(Strings.monthlyDetail, 17, AppColor.fieldTextColor, TextAlign.start)),
+
                       ],
                     ),
                     Image.asset((vm.checkPlan == 3)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -224,7 +260,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.yearly, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText("${vm.productList[2].price}/year", 17, AppColor.textColor, TextAlign.start)
+                        Common.mediumText("${vm.productList[2].price}/year", 17, AppColor.textColor, TextAlign.start),
+                        const SizedBox(height: 5,),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width*0.60,
+                            child: Common.commonText(Strings.yearlyDetail, 17, AppColor.fieldTextColor, TextAlign.start)),
+
                       ],
                     ),
                     Image.asset((vm.checkPlan == 4)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -234,35 +275,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ),
 
             SizedBox(height: 40,),
-            InkWell(
-              onTap: () {
-                if(vm.checkPlan == 0){
-                  showError("Please select plan");
-                }else if(vm.checkPlan == 1){
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
-                }else{
-                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
-                  performPayment(context);
-                }
-              },
-              child: Container(
-                height: 45,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: AppColor.greenColor,
-                    border: Border.all(color: AppColor.greenColor),
-                    borderRadius: BorderRadius.circular(30)),
-                margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Common.boldText(Strings.subscribe, 16, AppColor.whiteColor,TextAlign.start),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 30,),
+
           ],
         ),
       ),

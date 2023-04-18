@@ -44,8 +44,11 @@ class Strings{
   static var unlockUnlimitedAccess = "Unlock \nUnlimited Access";
   static var trial = "TRIAL";
   static var weekly = "WEEKLY";
+  static var weeklyDetail = "Upgrade to our weekly plan and enjoy an ad-free experience with unlimited access to all of Auria AI's chat categories. Perfect for those who want to chat frequently with Auria AI and take advantage of all the available features.";
   static var monthly = "MONTHLY";
+  static var monthlyDetail = "Upgrade to our monthly plan and get even more value with ad-free chatting and unlimited access to all of Auria AI's chat categories. Plus, with this plan, you can chat more often and save money compared to the weekly plan.";
   static var yearly = "YEARLY";
+  static var yearlyDetail = "Get the ultimate Auria AI experience with our yearly plan. Enjoy all the benefits of our monthly plan, with the added value of a discounted yearly price. This plan is perfect for those who want to chat with Auria AI frequently and save money over time.";
   static var subscribe = "Subscribe";
   static var makePayment = "Make Payment";
   static var cardHolderName = "Card Holder Name";
