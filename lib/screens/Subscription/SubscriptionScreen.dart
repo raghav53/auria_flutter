@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:auria_ai/screens/Subscription/SubscriptionVM.dart';
 import 'package:auria_ai/screens/Subscription/subscriptions_provider.dart';
@@ -89,28 +90,38 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           child: CircularProgressIndicator(),
         ),
         bottomNavigationBar:  Container(
+          alignment: Alignment.bottomCenter,
+          height: 130,
           color: AppColor.whiteColor,
-          child: InkWell(
-            onTap: () {
-              if(vm.checkPlan == 0){
-                showError("Please select plan");
-              }else if(vm.checkPlan == 1){
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
-              }else{
-                // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
-                performPayment(context);
-              }
-            },
-            child: Container(
-              height: 45,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: AppColor.greenColor,
-                  border: Border.all(color: AppColor.greenColor),
-                  borderRadius: BorderRadius.circular(30)),
-              margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-              child: Common.boldText(Strings.subscribe, 16, AppColor.whiteColor,TextAlign.start),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20,),
+              Common.boldText((Platform.isIOS)?"Secured with iTunes, Cancel anytime":"Secured with Google, Cancel anytime", 13, AppColor.black, TextAlign.center),
+              const SizedBox(height: 10,),
+              InkWell(
+                onTap: () {
+                  if(vm.checkPlan == 0){
+                    showError("Please select plan");
+                  }else if(vm.checkPlan == 1){
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
+                  }else{
+                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
+                    performPayment(context);
+                  }
+                },
+                child: Container(
+                  height: 45,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: AppColor.greenColor,
+                      border: Border.all(color: AppColor.greenColor),
+                      borderRadius: BorderRadius.circular(30)),
+                  margin: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  child: Common.boldText((vm.checkPlan == 1)?"Continue with free trial":(vm.checkPlan == 2)?"Continue with weekly":(vm.checkPlan == 3)?"Continue with monthly":"Continue with yearly", 16, AppColor.whiteColor,TextAlign.start),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -155,7 +166,34 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       children: [
                         Common.commonText(Strings.trial, 17, AppColor.fieldTextColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        Common.mediumText("Free Trial with ads", 17, AppColor.textColor, TextAlign.start)
+                        if(vm.checkPlan == 1)Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Get limited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Contain Ads", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     Image.asset((vm.checkPlan == 1)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -189,10 +227,34 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         const SizedBox(height: 5,),
                         Common.mediumText('${vm.productList[1].price}/week', 17, AppColor.textColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width*0.60,
-                            child: Common.commonText(Strings.weeklyDetail, 17, AppColor.fieldTextColor, TextAlign.start)),
-
+                        if(vm.checkPlan == 2)Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Get unlimited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     Image.asset((vm.checkPlan == 2)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -226,10 +288,42 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         const SizedBox(height: 5,),
                         Common.mediumText("${vm.productList[0].price}/month", 17, AppColor.textColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width*0.60,
-                            child: Common.commonText(Strings.monthlyDetail, 17, AppColor.fieldTextColor, TextAlign.start)),
-
+                        if(vm.checkPlan == 3)Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Get unlimited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Save money comparatively", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     Image.asset((vm.checkPlan == 3)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -262,9 +356,42 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         const SizedBox(height: 5,),
                         Common.mediumText("${vm.productList[2].price}/year", 17, AppColor.textColor, TextAlign.start),
                         const SizedBox(height: 5,),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width*0.60,
-                            child: Common.commonText(Strings.yearlyDetail, 17, AppColor.fieldTextColor, TextAlign.start)),
+                        if(vm.checkPlan == 4)Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Get unlimited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                Common.mediumText("Discounted yearly price.", 17, AppColor.textColor, TextAlign.start),
+                              ],
+                            ),
+                          ],
+                        )
 
                       ],
                     ),

@@ -12,7 +12,7 @@ import 'AnyModel.dart';
 
 class SubscriptionVM with ChangeNotifier{
 
-  var checkPlan = 0;
+  var checkPlan = 1;
 
   List<ProductDetails> productList = [];
   final gWeeklyId = 'auria_new_weekly';

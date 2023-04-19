@@ -42,7 +42,7 @@ class Strings{
   static var category = "Category";
   static var toYourAiAssistant = "to your ai assistant";
   static var unlockUnlimitedAccess = "Unlock \nUnlimited Access";
-  static var trial = "TRIAL";
+  static var trial = "FREE TRIAL";
   static var weekly = "WEEKLY";
   static var weeklyDetail = "Upgrade to our weekly plan and enjoy an ad-free experience with unlimited access to all of Auria AI's chat categories. Perfect for those who want to chat frequently with Auria AI and take advantage of all the available features.";
   static var monthly = "MONTHLY";
