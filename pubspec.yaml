@@ -51,6 +51,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   just_audio: ^0.9.31
   in_app_purchase: ^3.1.5
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

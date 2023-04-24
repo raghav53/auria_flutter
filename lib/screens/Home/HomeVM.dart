@@ -23,6 +23,7 @@ class HomeVM with ChangeNotifier{
   List<String> listImages = ['assets/images/mess_icon.png','assets/images/translate_icon.png','assets/images/search_icon.png','assets/images/history_icon_cat.png','assets/images/command_icon.png','assets/images/sql_icon.png'];
   List<String> listTitles = ['New Chat','Translate','Discover','History','Command','SQL'];
   String choise = '';
+  String expDate = '';
   CategoryPojo categoryPojo = CategoryPojo();
 
   String firstAndLast(){
@@ -86,4 +87,12 @@ class HomeVM with ChangeNotifier{
     return categoryPojo;
   }
 
+
+  int daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to
+        .difference(from)
+        .inHours / 24).round();
+  }
 }

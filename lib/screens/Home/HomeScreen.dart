@@ -1,9 +1,8 @@
-import 'dart:convert';
-
-import 'package:auria_ai/screens/Home/CategoryModel.dart';
 import 'package:auria_ai/screens/Home/HomeVM.dart';
 import 'package:auria_ai/utils/all_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../apis/api_controller.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
@@ -29,6 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     init();
 
+    var eDate = DateTime.fromMillisecondsSinceEpoch(signUpModel.body!.expireDate.toInt() * 1000);
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formatted = formatter.format(eDate);
+    vm.expDate = formatted.toString();
+    setState(() {
+
+    });
   }
 
   Future<void> init() async {
@@ -80,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
+            (signUpModel.body!.subscription == 0)?Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: RichText(
                 text: TextSpan(
@@ -88,7 +94,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 23, fontFamily: "Outfit-Medium", color: AppColor.whiteColor),
                   /*defining default style is optional */
                   children: <TextSpan>[
-                    TextSpan(text: ' 10-02-2023', style: TextStyle(color: AppColor.liteGreen)),
+                    TextSpan(text: ' ${vm.expDate}', style: TextStyle(color: AppColor.liteGreen)),
+                  ],
+                ),
+              ),
+            ):Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: RichText(
+                text: TextSpan(
+                  text: Strings.freePlanEnd,
+                  style: TextStyle(fontSize: 23, fontFamily: "Outfit-Medium", color: AppColor.whiteColor),
+                  /*defining default style is optional */
+                  children: <TextSpan>[
+                    TextSpan(text: ' ${vm.expDate}', style: TextStyle(color: AppColor.liteGreen)),
                   ],
                 ),
               ),
