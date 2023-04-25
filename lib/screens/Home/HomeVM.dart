@@ -24,6 +24,8 @@ class HomeVM with ChangeNotifier{
   List<String> listTitles = ['New Chat','Translate','Discover','History','Command','SQL'];
   String choise = '';
   String expDate = '';
+  var expTimeStamp = 0;
+  var currentDate = DateTime.now().millisecondsSinceEpoch;
   CategoryPojo categoryPojo = CategoryPojo();
 
   String firstAndLast(){

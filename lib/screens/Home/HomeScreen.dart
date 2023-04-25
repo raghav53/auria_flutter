@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     init();
 
+    vm.expTimeStamp = signUpModel.body!.expireDate.toInt();
     var eDate = DateTime.fromMillisecondsSinceEpoch(signUpModel.body!.expireDate.toInt() * 1000);
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formatted = formatter.format(eDate);
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            (signUpModel.body!.subscription == 0)?Padding(
+            (vm.expTimeStamp < int.parse(vm.currentDate.toString()))?(signUpModel.body!.subscription == 0)?Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: RichText(
                 text: TextSpan(
@@ -103,6 +104,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: RichText(
                 text: TextSpan(
                   text: Strings.freePlanEnd,
+                  style: TextStyle(fontSize: 23, fontFamily: "Outfit-Medium", color: AppColor.whiteColor),
+                  /*defining default style is optional */
+                  children: <TextSpan>[
+                    TextSpan(text: ' ${vm.expDate}', style: TextStyle(color: AppColor.liteGreen)),
+                  ],
+                ),
+              ),
+            ):Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: RichText(
+                text: TextSpan(
+                  text: Strings.planEnd,
                   style: TextStyle(fontSize: 23, fontFamily: "Outfit-Medium", color: AppColor.whiteColor),
                   /*defining default style is optional */
                   children: <TextSpan>[

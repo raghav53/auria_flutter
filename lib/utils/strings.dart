@@ -40,6 +40,7 @@ class Strings{
   static var searchHere = "Search Here...";
   static var freeTrialEnd = "Your Free Trial has\n ended on";
   static var freePlanEnd = "Your Plan has\n ended on";
+  static var planEnd = "Your Plan \n ended on";
   static var category = "Category";
   static var toYourAiAssistant = "to your ai assistant";
   static var unlockUnlimitedAccess = "Unlock \nUnlimited Access";
