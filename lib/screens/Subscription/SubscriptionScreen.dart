@@ -11,7 +11,6 @@ import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
 import '../Home/HomeScreen.dart';
-import 'AppleSubscriptionModel.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   static const String route = "SubscriptionScreenRoute";
@@ -71,7 +70,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.only(left: 10,right: 20),
                   child: Common.boldText(Strings.unlockUnlimitedAccess, 25, AppColor.whiteColor,TextAlign.start),
@@ -173,7 +172,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Get limited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Free 3 day trial, limited to 4,000 characters.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -181,7 +182,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Contain Ads", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Limited access to chat categories.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -189,7 +192,29 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Contains ads. ", 17, AppColor.textColor, TextAlign.start)),
+                              ],
+                            ),
+                             const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Fast image processing.", 17, AppColor.textColor, TextAlign.start)),
+                              ],
+                            ),
+                             const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Must be converted to a paid subscription to continue use.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                           ],
@@ -234,7 +259,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Get unlimited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Unlimited access to all chat categories for a week.", 17, AppColor.textColor, TextAlign.start)),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Weekly recurring fee. ", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -245,12 +282,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start),
                               ],
                             ),
-                            const SizedBox(height: 5,),
+                             const SizedBox(height: 5,),
                             Row(
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Fast image processing.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                           ],
@@ -295,7 +334,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Get unlimited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Unlimited access to all chat categories for a month.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -303,7 +344,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Monthly recurring fee.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -311,7 +354,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -319,7 +364,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Save money comparatively", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start)),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Save \$10 compared to weekly subscription.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                           ],
@@ -363,7 +420,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Get unlimited access of chat.", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Unlimited access to all chat categories for a year.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -371,7 +430,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Yearly recurring fee.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -379,7 +440,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Ads-free experience", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                             const SizedBox(height: 5,),
@@ -387,12 +450,23 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Icon(Icons.circle,color: AppColor.black,size: 12,),
                                 const SizedBox(width: 10,),
-                                Common.mediumText("Discounted yearly price.", 17, AppColor.textColor, TextAlign.start),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Fast image processing", 17, AppColor.textColor, TextAlign.start)),
+                              ],
+                            ),
+                            const SizedBox(height: 5,),
+                            Row(
+                              children: [
+                                Icon(Icons.circle,color: AppColor.black,size: 12,),
+                                const SizedBox(width: 10,),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.60,
+                                    child: Common.mediumText("Save \$261 compared to monthly subscription.", 17, AppColor.textColor, TextAlign.start)),
                               ],
                             ),
                           ],
                         )
-
                       ],
                     ),
                     Image.asset((vm.checkPlan == 4)?"assets/images/check_radio.png":"assets/images/uncheck_radio.png",height: 20,width: 20,)
@@ -401,7 +475,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               ),
             ),
 
-            SizedBox(height: 40,),
+            const SizedBox(height: 40,),
 
           ],
         ),
