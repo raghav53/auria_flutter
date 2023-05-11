@@ -27,6 +27,7 @@ Future<String> postMethod(
     "Accept": "application/json",
     "security_key": password,
   };
+  print("headers_____$headers");
 
   var request = http.MultipartRequest(method, Uri.parse("$baseUrl/$url"));
 
@@ -54,13 +55,13 @@ Future<String> methodWithHeader(
     BuildContext context) async {
   SharedPreferences srf = await SharedPreferences.getInstance();
 
-  print("TOKEN_____${srf.getString(AllKeys.auth)}");
+
   Map<String, String> headers = <String, String>{
     "Accept": "application/json",
     "security_key": password,
     'authorization': '${srf.getString(AllKeys.auth)}',
   };
-
+  print("headers_____$headers");
   var request = http.MultipartRequest(method, Uri.parse("$baseUrl/$url"));
   if (fieldsParams != null) {
     request.fields.addAll(fieldsParams);
@@ -99,6 +100,7 @@ Future<String> getMethodWithQuery(String method, String endUrl,
     "security_key": password,
     'authorization': '${srf.getString(AllKeys.auth)}',
   };
+  print("headers_____$headers");
 
   var request = http.Request(method, Uri.parse('$baseUrl/$endUrl'));
 

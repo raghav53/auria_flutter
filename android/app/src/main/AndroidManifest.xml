@@ -8,6 +8,11 @@
         android:label="Auria Ai"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-4774281274199118~2797903164"/>
+
         <activity
             android:name="com.auria.ai.MainActivity"
             android:exported="true"

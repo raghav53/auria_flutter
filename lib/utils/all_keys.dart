@@ -16,6 +16,7 @@ class AllKeys{
   static var getFaqs = "get-faqs";
   static var aiChat = "aiChat";
   static var getCategory = "get-category";
+  static var subscription = "subscription";
 
   //--------------------------------------------SharedPreferences Keys-------------------
 

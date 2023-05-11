@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:auria_ai/utils/all_keys.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -76,7 +77,7 @@ class SubscriptionVM with ChangeNotifier{
 
   //Subscription
   Future<AnyModel> subscription(Map<String,String> params,BuildContext context) async {
-    var response = await postMethod("POST", "subscription", params, null, context);
+    var response = await postMethod("POST", AllKeys.subscription, params, null, context);
     var res = jsonDecode(response);
     return AnyModel.fromJson(res);
   }

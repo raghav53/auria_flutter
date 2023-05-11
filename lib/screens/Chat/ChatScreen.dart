@@ -5,11 +5,14 @@ import 'package:auria_ai/screens/Chat/ChatVM.dart';
 import 'package:auria_ai/screens/Chat/receiver_text_view.dart';
 import 'package:auria_ai/screens/Chat/sender_text_view.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../apis/api_controller.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
 import '../../utils/user_preference.dart';
+import '../Subscription/SubscriptionScreen.dart';
 import 'chat_initial_view.dart';
 import 'chat_loader.dart';
 
@@ -24,6 +27,32 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   var vm = ChatVM();
+
+
+  BannerAd? bannerAd;
+  var isLoader = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    bannerAd = BannerAd(size: AdSize.banner,
+        adUnitId: "ca-app-pub-4774281274199118/6929879354",
+        listener: BannerAdListener(
+            onAdLoaded: (ad) {
+              setState(() {
+                isLoader = false;
+              });
+              print("Add Loaded");
+            },
+            onAdFailedToLoad: (ad,error){
+              ad.dispose();
+            }
+
+        ),
+        request: const AdRequest());
+    bannerAd!.load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Container(
           height: double.infinity,
-          padding: EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20),
           decoration: BoxDecoration(
             color: AppColor.whiteColor,
             border: Border.all(color: AppColor.whiteColor),
@@ -73,6 +102,18 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              (signUpModel.body!.subscription == 0) ? (isLoader == true)?
+              const SizedBox(
+                height: 0,
+              ):
+              Container(
+                color: AppColor.whiteColor,
+                height: 60,
+                child: AdWidget(ad: bannerAd!),
+              ):
+              const SizedBox(
+                height: 0,
+              ),
               Flexible(
                   child: ListView(
                     controller: vm.scrollController,
@@ -98,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.greenColor.withOpacity(0.3),
@@ -106,7 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -124,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -134,7 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -161,43 +202,48 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.red),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                        'Welcome to Auria! I\'m looking forward to helping you. You are on a 3 day free trial. You have 5000 words remaining! You can ',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      ),
-                                      TextSpan(
-                                          text: 'UPGRADE ',
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                },
+                                child: RichText(
+                                  text: const TextSpan(
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.red),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                          'Welcome to Auria! I\'m looking forward to helping you. You are on a 3 day free trial. You have 5000 words remaining! You can ',
                                           style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w700,
                                               color: Colors.red,
-                                              fontSize: 12)),
-                                      TextSpan(
-                                        text: 'to fully utilize Auria.',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      )
-                                    ]),
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        ),
+                                        TextSpan(
+                                            text: 'UPGRADE ',
+                                            style: TextStyle(
+                                                decoration: TextDecoration.underline,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.red,
+                                                fontSize: 12)),
+                                        TextSpan(
+                                          text: 'to fully utilize Auria.',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        )
+                                      ]),
 
+                                ),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           // Text('Please UPGRADE',style:
@@ -225,7 +271,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.textRed.withOpacity(0.3),
@@ -233,7 +279,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -251,7 +297,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -261,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -288,44 +334,49 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           //You have 2 days remaining on the trial.You have 500 words remaining! You can upgrade to fully utilize Jarvis.
                           Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.red),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                        'You have ${vm.trialDaysLeft} days remaining on the trial.You have ${vm.wordsLeft} words remaining! You can ',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      ),
-                                      TextSpan(
-                                          text: 'UPGRADE ',
-                                          style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w700,
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.red),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                          'You have ${vm.trialDaysLeft} days remaining on the trial.You have ${vm.wordsLeft} words remaining! You can ',
+                                          style: const TextStyle(
                                               color: Colors.red,
-                                              fontSize: 12)),
-                                      TextSpan(
-                                        text: 'to fully utilize Auria.',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      )
-                                    ]),
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        ),
+                                        const TextSpan(
+                                            text: 'UPGRADE ',
+                                            style: TextStyle(
+                                                decoration: TextDecoration.underline,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.red,
+                                                fontSize: 12)),
+                                        const TextSpan(
+                                          text: 'to fully utilize Auria.',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        )
+                                      ]),
 
+                                ),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           // Text('Please UPGRADE',style:
@@ -356,7 +407,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.textRed.withOpacity(0.3),
@@ -364,7 +415,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -382,7 +433,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -392,7 +443,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -419,43 +470,48 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.red),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                        'You have maxed out your daily limit on the trial. Please wait 24 hours to continue using Auria. You can ',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      ),
-                                      TextSpan(
-                                          text: 'UPGRADE ',
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                },
+                                child: RichText(
+                                  text: const TextSpan(
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.red),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                          'You have maxed out your daily limit on the trial. Please wait 24 hours to continue using Auria. You can ',
                                           style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w700,
                                               color: Colors.red,
-                                              fontSize: 12)),
-                                      TextSpan(
-                                        text: 'to fully utilize Auria.',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      )
-                                    ]),
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        ),
+                                        TextSpan(
+                                            text: 'UPGRADE ',
+                                            style: TextStyle(
+                                                decoration: TextDecoration.underline,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.red,
+                                                fontSize: 12)),
+                                        TextSpan(
+                                          text: 'to fully utilize Auria.',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        )
+                                      ]),
 
+                                ),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           // Text('Please UPGRADE',style:
@@ -483,7 +539,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.redColor.withOpacity(0.3),
@@ -491,7 +547,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -509,7 +565,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -519,7 +575,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -546,19 +602,19 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Flexible(
                             child: Text(
                               vm.errorMesasge,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.w300,
                                   fontSize: 12),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                         ],
@@ -578,7 +634,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.redColor.withOpacity(0.3),
@@ -586,7 +642,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -604,7 +660,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -614,7 +670,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -641,44 +697,49 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.red),
-                                    children: [
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                },
+                                child: RichText(
+                                  text: const TextSpan(
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300,
+                                          color: Colors.red),
+                                      children: [
 
-                                      TextSpan(
-                                        text:
-                                        'Your 3 day trial has ended. You can ',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      ),
-                                      TextSpan(
-                                          text: 'UPGRADE ',
+                                        TextSpan(
+                                          text:
+                                          'Your 3 day trial has ended. You can ',
                                           style: TextStyle(
-                                              decoration: TextDecoration.underline,
-                                              fontWeight: FontWeight.w700,
                                               color: Colors.red,
-                                              fontSize: 12)),
-                                      TextSpan(
-                                        text: 'to fully utilize Auria.',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 12),
-                                      )
-                                    ]),
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        ),
+                                        TextSpan(
+                                            text: 'UPGRADE ',
+                                            style: TextStyle(
+                                                decoration: TextDecoration.underline,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.red,
+                                                fontSize: 12)),
+                                        TextSpan(
+                                          text: 'to fully utilize Auria.',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 12),
+                                        )
+                                      ]),
 
+                                ),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           // Text('Please UPGRADE',style:
@@ -710,7 +771,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.redColor.withOpacity(0.3),
@@ -718,7 +779,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -736,7 +797,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -746,7 +807,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -773,13 +834,13 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Flexible(
                               child: RichText(
                                 text: TextSpan(
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w300,
                                         color: Colors.red),
@@ -787,7 +848,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       TextSpan(
                                         text:
                                         'You almost hit your daily limit! You have ${vm.wordsLeft} words left!',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.red,
                                             fontWeight: FontWeight.w300,
                                             fontSize: 12),
@@ -796,7 +857,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ]),
 
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           // Text('Please UPGRADE',style:
@@ -826,7 +887,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.redColor.withOpacity(0.3),
@@ -834,7 +895,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -852,7 +913,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -862,7 +923,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -889,10 +950,10 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
-                          Flexible(
+                          const Flexible(
                             child: Text(
                               'You have maxed out your daily limit! Please wait 24 hours to continue using Auria.',
                               style: TextStyle(
@@ -901,7 +962,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   fontSize: 12),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           // Text('Please UPGRADE',style:
@@ -929,7 +990,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
                           color:
                           AppColor.redColor.withOpacity(0.3),
@@ -937,7 +998,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           border: Border.all(color: Colors.red, width: 1)),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Stack(
@@ -955,7 +1016,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             color: Colors.grey.withOpacity(0.4),
                                             blurRadius: 2,
                                             spreadRadius: 2,
-                                            offset: Offset(0, 1))
+                                            offset: const Offset(0, 1))
                                       ]),
                                   child: Image.asset(
                                     'assets/images/apple_icon.png',
@@ -965,7 +1026,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               Align(
                                 alignment: Alignment.center,
-                                child: Container(
+                                child: SizedBox(
                                   width: 25,
                                   height: 25,
                                   child: Align(
@@ -992,19 +1053,19 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Flexible(
                             child: Text(
                               vm.errorMesasge,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.w300,
                                   fontSize: 12),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                         ],
@@ -1017,13 +1078,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 Padding(
                     padding: const EdgeInsets.only(
                         left: 25.0, right: 25.0, bottom: 0, top: 10),
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Row(
                         children: [
                           Flexible(
                             child: ConstrainedBox(
-                              constraints: BoxConstraints(maxHeight: 200),
+                              constraints: const BoxConstraints(maxHeight: 200),
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
@@ -1033,7 +1094,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           spreadRadius: 2,
                                           blurRadius: 3,
                                           color: Colors.grey.withOpacity(0.3),
-                                          offset: Offset(0, 2))
+                                          offset: const Offset(0, 2))
                                     ]),
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 0.0),
@@ -1046,14 +1107,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                         color: AppColor.fieldTextColor,
                                         fontWeight: FontWeight.w400),
                                     decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.only(top: 15, bottom: 5),
+                                        contentPadding: const EdgeInsets.only(top: 15, bottom: 5),
                                         hintText: 'Type here',
                                         hintStyle: TextStyle(
                                             color: Colors.grey.shade400,
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400),
                                         border: InputBorder.none,
-                                        prefix: SizedBox(
+                                        prefix: const SizedBox(
                                           width: 15,
                                         ),
                                         suffixIcon: Padding(
@@ -1102,7 +1163,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     )),
 
-              SizedBox(
+              const SizedBox(
                 height: 30,
               )
             ],
@@ -1122,7 +1183,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ));
       }
       else if (item.isFrom == 'loader'){
-        mArray.add(ChatLoader());
+        mArray.add(const ChatLoader());
       }
       else {
         mArray.add(ReceiverTextView(
@@ -1162,7 +1223,7 @@ class _ChatScreenState extends State<ChatScreen> {
           setState(() {
             vm.scrollController.animateTo(
                 vm.scrollController.position.maxScrollExtent,
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOut);
             vm.timer.cancel();
           });
@@ -1200,7 +1261,7 @@ class _ChatScreenState extends State<ChatScreen> {
             setState(() {
               vm.scrollController.animateTo(
                   vm.scrollController.position.maxScrollExtent,
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.easeOut);
               vm.timer.cancel();
             });
@@ -1254,10 +1315,10 @@ class _ChatScreenState extends State<ChatScreen> {
     var result = await vm.getProfile(context);
     debugPrint('Get PRofile API RESPONSe ------------->${result.message}');
     UserPreference.shared.setUserData(result);
-    vm.isSubscribed = result?.body?.subscription ?? 0;
-    vm.expireDate = result?.body?.expireDate ?? 0;
-    vm.email = result?.body?.email ?? '';
-    vm.wordsLeft = result?.body?.todayWords ?? 0;
+    vm.isSubscribed = result.body?.subscription ?? 0;
+    vm.expireDate = result.body?.expireDate ?? 0;
+    vm.email = result.body?.email ?? '';
+    vm.wordsLeft = result.body?.todayWords ?? 0;
     var nDate = DateTime.fromMillisecondsSinceEpoch(vm.expireDate * 1000);
     vm.trialDaysLeft = vm.daysBetween(DateTime.now(), eDate);
     if ((DateTime.now().compareTo(nDate) >= 0)) {

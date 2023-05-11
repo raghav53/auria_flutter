@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:auria_ai/apis/api_controller.dart';
+import 'package:auria_ai/apis/common_model.dart';
 import 'package:auria_ai/screens/Subscription/SubscriptionVM.dart';
 import 'package:auria_ai/screens/Subscription/subscriptions_provider.dart';
+import 'package:auria_ai/utils/all_keys.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -84,10 +87,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               ],
             ),
           ],
-        ):
-        const Center(
+        ) : const Center(
           child: CircularProgressIndicator(),
         ),
+
         bottomNavigationBar:  Container(
           alignment: Alignment.bottomCenter,
           height: 130,
@@ -123,6 +126,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ],
           ),
         ),
+
       ),
     );
   }
@@ -487,8 +491,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     if (defaultTargetPlatform == TargetPlatform.iOS){
 
     }
-
     ProductDetails? productToBuy;
+
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       if (vm.checkPlan == 2) {
         var index = vm.productList.indexWhere((element) =>
@@ -509,11 +513,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         var index = vm.productList.indexWhere((element) =>
         element.id == vm.gWeeklyId);
         productToBuy = vm.productList.elementAt(index);
-      } else if(vm.checkPlan == 3) {
+      }
+      else if(vm.checkPlan == 3) {
         var index = vm.productList.indexWhere((element) =>
         element.id == vm.gMonthlyId);
         productToBuy = vm.productList.elementAt(index);
-      } else if(vm.checkPlan == 4) {
+      }
+      else if(vm.checkPlan == 4) {
         var index = vm.productList.indexWhere((element) =>
         element.id == vm.gYearlyId);
         productToBuy = vm.productList.elementAt(index);
@@ -521,14 +527,27 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     }
 
     await SubscriptionsProvider.instance.buySubscription(productToBuy!, (PurchaseDetails details) async {
-      var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':details.verificationData.serverVerificationData}, context);
-      if (!mounted){ return;}
-      if (anyModel.success == 1){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
+
+      // var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':details.verificationData.serverVerificationData}, context);
+
+      Map<String,String> map = {
+        "transaction_id":details.purchaseID.toString(),
+        "amount":productToBuy!.rawPrice.toString(),
+        "type":(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",
+        "json_data":details.verificationData.serverVerificationData,
+      };
+      String res = await methodWithHeader("POST", AllKeys.subscription, map, null, context);
+
+      var response = jsonDecode(res);
+
+      CommonModel commonModel = CommonModel.fromJson(response);
+      if (commonModel.success == 200){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
       }else{
-        showToast(anyModel.message ?? '');
+        showToast(commonModel.message ?? '');
       }
     });
+
   }
 
 }

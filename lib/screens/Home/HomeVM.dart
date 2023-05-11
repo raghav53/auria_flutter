@@ -1,28 +1,21 @@
-
 import 'dart:convert';
-
 import 'package:auria_ai/screens/Home/CategoryModel.dart';
-import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:auria_ai/screens/SaveChat/SaveChatScreen.dart';
 import 'package:auria_ai/screens/Settings/SettingsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../apis/api_controller.dart';
 import '../../dialogs/logout/LogoutDialog.dart';
 import '../../utils/all_keys.dart';
-import '../../utils/common.dart';
 import '../Chat/ChatScreen.dart';
-import '../SignUp/SignUpModel.dart';
 import '../Subscription/SubscriptionScreen.dart';
 
 class HomeVM with ChangeNotifier{
 
-
   TextEditingController search = TextEditingController();
   List<String> listImages = ['assets/images/mess_icon.png','assets/images/translate_icon.png','assets/images/search_icon.png','assets/images/history_icon_cat.png','assets/images/command_icon.png','assets/images/sql_icon.png'];
   List<String> listTitles = ['New Chat','Translate','Discover','History','Command','SQL'];
-  String choise = '';
+  String choice = '';
   String expDate = '';
   var expTimeStamp = 0;
   var currentDate = DateTime.now().millisecondsSinceEpoch;
@@ -46,22 +39,22 @@ class HomeVM with ChangeNotifier{
   }
 
 
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   void newChatClick(BuildContext context, String prompt, String description) {
     Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(prompt:prompt,description:description)));
   }
 
   void saveChatClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>SaveChatScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>const SaveChatScreen()));
   }
 
   void subscriptionClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
   }
 
   void settingsClick(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>const SettingsScreen()));
   }
 
   void logoutClick(BuildContext context) {
