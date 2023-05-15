@@ -2,6 +2,7 @@ import 'package:auria_ai/screens/EditProfile/EditProfileScreen.dart';
 import 'package:auria_ai/screens/Faq/FaqScreen.dart';
 import 'package:auria_ai/screens/Home/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../apis/api_controller.dart';
@@ -64,7 +65,22 @@ class SettingsVM with ChangeNotifier {
         context, MaterialPageRoute(builder: (context) => FaqScreen()));
   }
 
-  void upgradeClick(BuildContext context) {}
+  Future<void> appleLinkClick(BuildContext context) async {
+    if (await canLaunch('https://apps.apple.com/us/app/auria-ai/id1670275202')) {
+      await launch('https://apps.apple.com/us/app/auria-ai/id1670275202');
+    } else {
+      throw 'Could not launch';
+    }
+  }
+  Future<void> androidLinkClick(BuildContext context) async {
+    if (await canLaunch('https://play.google.com/store/search?q=Auria%20ai&c=apps')) {
+      await launch('https://play.google.com/store/search?q=Auria%20ai&c=apps');
+    } else {
+      throw 'Could not launch';
+    }
+  }
 
-  void shareClick(BuildContext context) {}
+  void shareClick(BuildContext context) {
+    Share.share("Play Store \nhttps://play.google.com/store/search?q=Auria%20ai&c=apps \n\nApp Store \nhttps://apps.apple.com/us/app/auria-ai/id1670275202", subject: 'Download Links');
+  }
 }

@@ -76,6 +76,7 @@ Future<String> methodWithHeader(
   request.headers.addAll(headers);
   http.StreamedResponse streamedRequest = await request.send();
   print(streamedRequest.toString());
+
   if (streamedRequest.statusCode == 401) {
     srf.clear();
     Navigator.pushAndRemoveUntil(

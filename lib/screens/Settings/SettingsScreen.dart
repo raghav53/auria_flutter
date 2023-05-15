@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:auria_ai/dialogs/deleteAccount/DeleteAccountDialog.dart';
 import 'package:auria_ai/screens/Settings/SettingsVM.dart';
 import 'package:flutter/material.dart';
 
@@ -241,7 +244,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             //----------------------------------------------------Upgrade App-------------------
             InkWell(
               onTap: (){
-                vm.upgradeClick(context);
+
+                if(Platform.isAndroid){
+                  vm.androidLinkClick(context);
+                }else{
+                  vm.appleLinkClick(context);
+                }
+
               },
               child: Container(
                 height: 45,
@@ -296,6 +305,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                     Icon(Icons.navigate_next,color: AppColor.fieldTextColor,size: 35,)
+                  ],
+                ),
+              ),
+            ),
+            Divider(color: AppColor.fieldTextColor,),
+            //----------------------------------------------------Share App-------------------
+            InkWell(
+              onTap: (){
+                showDialog(context: context, builder: (BuildContext context)=> const DeleteAccountDialog());
+              },
+              child: Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: AppColor.whiteColor,
+                    border: Border.all(color: AppColor.whiteColor),
+                    borderRadius: BorderRadius.circular(10)),
+                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                padding: const EdgeInsets.only(left: 20,right: 20),
+                child: Row(
+                  children: [
+                    Image.asset("assets/images/delete.png",height: 20,width: 20,),
+                    const SizedBox(width: 10,),
+                    Common.mediumText(Strings.deleteAccount, 18, AppColor.redColor, TextAlign.start)
                   ],
                 ),
               ),

@@ -17,6 +17,11 @@ class AllKeys{
   static var aiChat = "aiChat";
   static var getCategory = "get-category";
   static var subscription = "subscription";
+  static var saveChat = "saveChat";
+  static var getSavedChat = "getSavedChat";
+  static var deleteSavedChat = "deleteSavedChat?chat_id=";
+  static var editSavedChat = "editSavedChat";
+  static var deleteAccount = "delete-account";
 
   //--------------------------------------------SharedPreferences Keys-------------------
 

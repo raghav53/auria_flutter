@@ -190,11 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
-                            suffixIcon: Icon(
-                              Icons.mic_none_rounded,
-                              color: AppColor.fieldTextColor,
-                              size: 35,
-                            ),
                             errorBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(

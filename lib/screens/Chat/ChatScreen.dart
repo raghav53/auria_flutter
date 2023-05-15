@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:auria_ai/dialogs/message/MessageDialog.dart';
 import 'package:auria_ai/screens/Chat/ChatModel.dart';
 import 'package:auria_ai/screens/Chat/ChatVM.dart';
 import 'package:auria_ai/screens/Chat/receiver_text_view.dart';
 import 'package:auria_ai/screens/Chat/sender_text_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
 import '../../apis/api_controller.dart';
 import '../../utils/color.dart';
@@ -18,19 +20,25 @@ import 'chat_loader.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String route = "ChatScreenRoute";
-  String prompt,description;
-  ChatScreen({Key? key, required this.prompt, required this.description}) : super(key: key);
+  String prompt, description;
+  List<Map<String, String>> messageList;
+
+  ChatScreen(
+      {Key? key, required this.prompt, required this.description, required this.messageList})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
   var vm = ChatVM();
 
 
   BannerAd? bannerAd;
   var isLoader = true;
+
 
   @override
   void didChangeDependencies() {
@@ -45,7 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
               });
               print("Add Loaded");
             },
-            onAdFailedToLoad: (ad,error){
+            onAdFailedToLoad: (ad, error) {
               ad.dispose();
             }
 
@@ -55,19 +63,87 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    getUserData();
+    _initSpeech();
+
+    if (widget.messageList.isNotEmpty) {
+      for (var i = 0; i < widget.messageList.length; i++) {
+        LocalChatData aiData = LocalChatData(
+            isFrom: widget.messageList[i]["isFrom"].toString(),
+            humanMesasge: widget.messageList[i]["humanMesasge"].toString(),
+            aiMessage: widget.messageList[i]["aiMessage"].toString(),
+            category: 'chat',
+            prompt: widget.messageList[i]["prompt"].toString(),
+            description: widget.messageList[i]["description"].toString(),
+            id: int.parse(widget.messageList[i]["id"].toString()));
+        vm.chatArray.add(aiData);
+      }
+
+      setState(() {
+        vm.timer = Timer(const Duration(milliseconds: 200), () {
+          setState(() {
+            vm.scrollController.animateTo(
+                vm.scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut);
+            vm.timer.cancel();
+          });
+        });
+      });
+    }
+  }
+
+  /// This has to happen only once per app
+  void _initSpeech() async {
+    vm.speechEnabled = await vm.speechToText.initialize();
+    setState(() {});
+  }
+
+  /// Each time to start a speech recognition session
+  void _startListening() async {
+    await vm.speechToText.listen(onResult: _onSpeechResult);
+    setState(() {});
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  void _stopListening() async {
+    await vm.speechToText.stop();
+    setState(() {});
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      vm.lastWords = result.recognizedWords;
+      vm.chatController.text = vm.lastWords.toString();
+      print("${vm.lastWords}");
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
       width: double.infinity,
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage("assets/images/background_img.png"), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: AssetImage("assets/images/background_img.png"),
+            fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0.0,
           centerTitle: true,
-          title: Common.mediumText(Strings.aiSearch, 20, AppColor.whiteColor, TextAlign.start),
+          title: Common.mediumText(
+              Strings.aiSearch, 20, AppColor.whiteColor, TextAlign.start),
           backgroundColor: Colors.transparent,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -77,7 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           actions: [
             InkWell(
-              onTap: (){
+              onTap: () {
                 vm.showSaveDialog(context);
               },
               child: Padding(
@@ -97,20 +173,21 @@ class _ChatScreenState extends State<ChatScreen> {
           decoration: BoxDecoration(
             color: AppColor.whiteColor,
             border: Border.all(color: AppColor.whiteColor),
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(40), topRight: Radius.circular(40)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              (signUpModel.body!.subscription == 0) ? (isLoader == true)?
+              (signUpModel.body!.subscription == 0) ? (isLoader == true) ?
               const SizedBox(
                 height: 0,
-              ):
+              ) :
               Container(
                 color: AppColor.whiteColor,
                 height: 60,
                 child: AdWidget(ad: bannerAd!),
-              ):
+              ) :
               const SizedBox(
                 height: 0,
               ),
@@ -124,11 +201,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             vm.chatController.text = widget.description;
                             // vm.sendMessage();
                           }
-                        },desc:widget.description)
+                        }, desc: widget.description)
                     ] : getChatList(vm.chatArray),
                   )),
 //FOR TRIAL USERS
-              if (vm.isSubscribed == 0 && vm.firstLogin && vm.errorMesasge == '')
+              if (vm.isSubscribed == 0 && vm.firstLogin &&
+                  vm.errorMesasge == '')
                 Padding(
                   padding:
                   const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
@@ -185,14 +263,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -207,8 +287,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Flexible(
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (
+                                          context) => const SubscriptionScreen()));
                                 },
                                 child: RichText(
                                   text: const TextSpan(
@@ -228,7 +310,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                         TextSpan(
                                             text: 'UPGRADE ',
                                             style: TextStyle(
-                                                decoration: TextDecoration.underline,
+                                                decoration: TextDecoration
+                                                    .underline,
                                                 fontWeight: FontWeight.w700,
                                                 color: Colors.red,
                                                 fontSize: 12)),
@@ -259,7 +342,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
 
-              if (vm.isSubscribed == 0 && vm.errorMesasge == '' && !vm.isExpired && !vm.firstLogin &&
+              if (vm.isSubscribed == 0 && vm.errorMesasge == '' &&
+                  !vm.isExpired && !vm.firstLogin &&
                   vm.wordsLeft != 0)
                 Padding(
                   padding:
@@ -317,14 +401,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -340,8 +426,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           //You have 2 days remaining on the trial.You have 500 words remaining! You can upgrade to fully utilize Jarvis.
                           Flexible(
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (
+                                          context) => const SubscriptionScreen()));
                                 },
                                 child: RichText(
                                   text: TextSpan(
@@ -352,7 +440,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                       children: [
                                         TextSpan(
                                           text:
-                                          'You have ${vm.trialDaysLeft} days remaining on the trial.You have ${vm.wordsLeft} words remaining! You can ',
+                                          'You have ${vm
+                                              .trialDaysLeft} days remaining on the trial.You have ${vm
+                                              .wordsLeft} words remaining! You can ',
                                           style: const TextStyle(
                                               color: Colors.red,
                                               fontWeight: FontWeight.w300,
@@ -361,7 +451,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                         const TextSpan(
                                             text: 'UPGRADE ',
                                             style: TextStyle(
-                                                decoration: TextDecoration.underline,
+                                                decoration: TextDecoration
+                                                    .underline,
                                                 fontWeight: FontWeight.w700,
                                                 color: Colors.red,
                                                 fontSize: 12)),
@@ -453,14 +544,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -475,8 +568,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Flexible(
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (
+                                          context) => const SubscriptionScreen()));
                                 },
                                 child: RichText(
                                   text: const TextSpan(
@@ -496,7 +591,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                         TextSpan(
                                             text: 'UPGRADE ',
                                             style: TextStyle(
-                                                decoration: TextDecoration.underline,
+                                                decoration: TextDecoration
+                                                    .underline,
                                                 fontWeight: FontWeight.w700,
                                                 color: Colors.red,
                                                 fontSize: 12)),
@@ -527,7 +623,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
 
-              if (vm.isSubscribed == 0 && vm.errorMesasge != '' && !vm.isExpired)
+              if (vm.isSubscribed == 0 && vm.errorMesasge != '' &&
+                  !vm.isExpired)
                 Padding(
                   padding:
                   const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
@@ -585,14 +682,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -680,14 +779,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -702,8 +803,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Flexible(
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const SubscriptionScreen()));
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (
+                                          context) => const SubscriptionScreen()));
                                 },
                                 child: RichText(
                                   text: const TextSpan(
@@ -724,7 +827,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                         TextSpan(
                                             text: 'UPGRADE ',
                                             style: TextStyle(
-                                                decoration: TextDecoration.underline,
+                                                decoration: TextDecoration
+                                                    .underline,
                                                 fontWeight: FontWeight.w700,
                                                 color: Colors.red,
                                                 fontSize: 12)),
@@ -757,7 +861,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
               //FOR PAID USERS
 
-              if (vm.isSubscribed == 1 && vm.wordsLeft <= 2000 && vm.errorMesasge == '' && vm.wordsLeft != 0)
+              if (vm.isSubscribed == 1 && vm.wordsLeft <= 2000 &&
+                  vm.errorMesasge == '' && vm.wordsLeft != 0)
                 Padding(
                   padding:
                   const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
@@ -817,14 +922,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -847,7 +954,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     children: [
                                       TextSpan(
                                         text:
-                                        'You almost hit your daily limit! You have ${vm.wordsLeft} words left!',
+                                        'You almost hit your daily limit! You have ${vm
+                                            .wordsLeft} words left!',
                                         style: const TextStyle(
                                             color: Colors.red,
                                             fontWeight: FontWeight.w300,
@@ -873,7 +981,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
 
-              if (vm.isSubscribed == 1 && vm.wordsLeft == 0 && vm.errorMesasge == '')
+              if (vm.isSubscribed == 1 && vm.wordsLeft == 0 &&
+                  vm.errorMesasge == '')
                 Padding(
                   padding:
                   const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
@@ -933,14 +1042,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -1036,14 +1147,16 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                           color: Colors.red,
-                                          borderRadius: BorderRadius.circular(6)),
+                                          borderRadius: BorderRadius.circular(
+                                              6)),
                                       child: const Padding(
                                         padding: EdgeInsets.only(bottom: 0.0),
                                         child: Center(
                                           child: Text(
                                             '!',
                                             style: TextStyle(
-                                                color: Colors.white, fontSize: 10),
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
                                         ),
                                       ),
@@ -1074,7 +1187,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
 
-              if ((vm.isSubscribed == 1) || (vm.isSubscribed == 0 && !vm.isExpired))
+              if ((vm.isSubscribed == 1) ||
+                  (vm.isSubscribed == 0 && !vm.isExpired))
                 Padding(
                     padding: const EdgeInsets.only(
                         left: 25.0, right: 25.0, bottom: 0, top: 10),
@@ -1099,6 +1213,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 0.0),
                                   child: TextField(
+                                    onTap: (){
+                                      vm.clickSpeech = false;
+                                      setState(() {
+                                        _stopListening();
+                                      });
+                                    },
                                     controller: vm.chatController,
                                     maxLines: null,
                                     keyboardType: TextInputType.text,
@@ -1107,7 +1227,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                         color: AppColor.fieldTextColor,
                                         fontWeight: FontWeight.w400),
                                     decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.only(top: 15, bottom: 5),
+                                        contentPadding: const EdgeInsets.only(
+                                            top: 15, bottom: 5),
                                         hintText: 'Type here',
                                         hintStyle: TextStyle(
                                             color: Colors.grey.shade400,
@@ -1119,12 +1240,36 @@ class _ChatScreenState extends State<ChatScreen> {
                                         ),
                                         suffixIcon: Padding(
                                           padding: const EdgeInsets.all(5.0),
-                                          child: InkWell(
+                                          child: (vm.clickSpeech == true)
+                                              ? InkWell(
                                               onTap: () {
-                                                // sendMessage();
+                                                vm.clickSpeech = false;
+                                                setState(() {
+                                                  _stopListening();
+                                                });
+                                              },
+                                              child: Container(
+                                                height: 20,
+                                                width: 20,
+                                                padding: const EdgeInsets.all(
+                                                    11.0),
+                                                child: Image.asset(
+                                                  'assets/images/close.png',
+                                                  height: 18,
+                                                  width: 18,
+                                                  color: AppColor.fieldTextColor,
+                                                ),
+                                              ))
+                                              : InkWell(
+                                              onTap: () {
+                                                vm.clickSpeech = true;
+                                                setState(() {
+                                                  _startListening();
+                                                });
                                               },
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(
+                                                    8.0),
                                                 child: Image.asset(
                                                   'assets/images/mike_icon.png',
                                                   height: 20,
@@ -1140,16 +1285,22 @@ class _ChatScreenState extends State<ChatScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10.0),
                             child: InkWell(
-                              onTap: (){
-                                  sendMessage();
+                              onTap: () {
+                                sendMessage();
+                                vm.clickSpeech = false;
+                                setState(() {
+                                  _stopListening();
+                                });
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: AppColor.greenColor,
-                                  border: Border.all(color: AppColor.whiteColor),
+                                  border: Border.all(
+                                      color: AppColor.whiteColor),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
-                                padding: const EdgeInsets.only(top: 12, bottom: 10, left: 10, right: 12),
+                                padding: const EdgeInsets.only(
+                                    top: 12, bottom: 10, left: 10, right: 12),
                                 child: Image.asset(
                                   "assets/images/send_message_icon.png",
                                   color: AppColor.whiteColor,
@@ -1177,17 +1328,35 @@ class _ChatScreenState extends State<ChatScreen> {
     List<Widget> mArray = [];
     for (var item in messages) {
       if (item.isFrom == 'human') {
-        mArray.add(SenderTextView(
-          chatData: item,
-          email: vm.email,
+        mArray.add(GestureDetector(
+          onLongPress: () async {
+            var result = await showDialog(
+              barrierDismissible: false, context: context, builder: (
+                BuildContext context) => MessageDailog(chatData: item),);
+            return result;
+          },
+          child: SenderTextView(
+            chatData: item,
+            email: vm.email,
+          ),
         ));
       }
-      else if (item.isFrom == 'loader'){
+      else if (item.isFrom == 'loader') {
         mArray.add(const ChatLoader());
       }
       else {
-        mArray.add(ReceiverTextView(
-          chatData: item,
+        mArray.add(GestureDetector(
+          onLongPress: () {
+
+          },
+          child: ReceiverTextView(
+            chatData: item,
+            isLast: (item.id == messages.last.id) ? true : false,
+             vm: vm,
+            regeratedTapped: (){
+              sendMessage();
+            },
+          ),
         ));
       }
     }
@@ -1197,27 +1366,35 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> sendMessage() async {
     if (vm.chatController.text.trim().isNotEmpty) {
+
       FocusManager.instance.primaryFocus?.unfocus();
-      String message = '';
+      String message = vm.chatController.text;
       LocalChatData data = LocalChatData(
           isFrom: 'human',
-          humanMesasge: vm.chatController.text,
+          humanMesasge: message,
           aiMessage: '',
           category: 'chat',
+          prompt: widget.prompt,
+          description: widget.description,
           id: vm.chatId);
 
       vm.chatArray.add(data);
+
       message = vm.chatController.text;
       vm.chatController.text = '';
-
+      vm.lastQuestion = message;
       LocalChatData loaderData = LocalChatData(
           isFrom: 'loader',
           humanMesasge: message,
           aiMessage: '',
           category: 'chat',
+          prompt: widget.prompt,
+          description: widget.description,
           id: vm.chatId);
       vm.chatArray.add(loaderData);
+
       await playSendTone();
+
       setState(() {
         vm.timer = Timer(const Duration(milliseconds: 200), () {
           setState(() {
@@ -1232,11 +1409,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
       print("description_______________${widget.description}");
       var model;
-      if(message == widget.description.toString()){
-        model = await vm.chatWithAI({'chat': 'Human:$message\\n\\nAuria:'}, context);
-      }else{
-       model = await vm.chatWithAI({'chat': '${widget.prompt}\\n\\nHuman:$message\\n\\nAuria:'}, context);
-
+      if (message == widget.description.toString()) {
+        model =
+        await vm.chatWithAI({'chat': 'Human:$message\\n\\nAuria:'}, context);
+      } else {
+        model = await vm.chatWithAI(
+            {'chat': '${widget.prompt}\\n\\nHuman:$message\\n\\nAuria:'},
+            context);
       }
 
       if (!mounted) {
@@ -1253,6 +1432,8 @@ class _ChatScreenState extends State<ChatScreen> {
             humanMesasge: message,
             aiMessage: model.body?.choices?.first.text ?? '',
             category: 'chat',
+            prompt: widget.prompt,
+            description: widget.description,
             id: vm.chatId);
         vm.chatId += 1;
         vm.chatArray.add(aiData);
@@ -1270,9 +1451,10 @@ class _ChatScreenState extends State<ChatScreen> {
       }
 
       else {
-        if ((model.message ?? '').toLowerCase() == 'You have reached your daily word limit'.toLowerCase()){
+        if ((model.message ?? '').toLowerCase() ==
+            'You have reached your daily word limit'.toLowerCase()) {
           vm.errorMesasge = '';
-        }else{
+        } else {
           vm.errorMesasge = model.message ?? '';
         }
 
@@ -1282,9 +1464,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
 
       getUserData();
-
     }
-
   }
 
 
@@ -1326,9 +1506,11 @@ class _ChatScreenState extends State<ChatScreen> {
     } else {
       vm.isExpired = false;
     }
+
+
     setState(() {});
 
-   /* if (vm.isExpired) {
+    /* if (vm.isExpired) {
       await SubscriptionsProvider.instance
           .restorePurchases((PurchaseDetails details) async {
         var anyModel = await APIManager.shared.subscription({
@@ -1357,10 +1539,5 @@ class _ChatScreenState extends State<ChatScreen> {
     }*/
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserData();
-  }
+
 }

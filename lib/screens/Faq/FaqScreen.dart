@@ -23,7 +23,7 @@ class _FaqScreenState extends State<FaqScreen> {
   void initState() {
     super.initState();
 
-    vm.getFaq(context);
+    init();
 
   }
 
@@ -68,6 +68,7 @@ class _FaqScreenState extends State<FaqScreen> {
     return Flexible(
       child: Container(
         width: MediaQuery.of(context).size.width,
+        height: double.infinity,
         margin: const EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
           color: AppColor.whiteColor,
@@ -76,9 +77,18 @@ class _FaqScreenState extends State<FaqScreen> {
               topLeft: Radius.circular(40), topRight: Radius.circular(40)),
         ),
         padding: const EdgeInsets.fromLTRB(15, 25, 15, 10),
-        child: ListView.builder(
+        child: (vm.isLoading == true)?
+        const Center(child: SizedBox(
+          height: 50,
+            width: 50,
+            child: CircularProgressIndicator())):
+        (vm.faqModel.body == null)?
+        Center(
+          child: Common.boldText("No Data", 20, AppColor.black, TextAlign.center),
+        ):
+        ListView.builder(
             padding: EdgeInsets.zero,
-            itemCount: 10,
+            itemCount: vm.faqModel.body!.length,
             itemBuilder: (context, index) {
               return Container(
                 margin: const EdgeInsets.only(top: 5, bottom: 5),
@@ -107,9 +117,9 @@ class _FaqScreenState extends State<FaqScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              child: Common.commonText("Why do we use it?", 19,
-                                  AppColor.textColor, TextAlign.start),
                               width: MediaQuery.of(context).size.width*0.70,
+                              child: Common.commonText(vm.faqModel.body![index].question.toString(), 19,
+                                  AppColor.textColor, TextAlign.start),
                             ),
                             Container(
                               child: vm.faqClick == index
@@ -133,7 +143,7 @@ class _FaqScreenState extends State<FaqScreen> {
                       Container(
                         child: vm.faqClick == index
                             ? Common.mediumText(
-                                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.",
+                            vm.faqModel.body![index].answer.toString(),
                                 17,
                                 AppColor.fieldTextColor,
                                 TextAlign.start)
@@ -147,6 +157,14 @@ class _FaqScreenState extends State<FaqScreen> {
             }),
       ),
     );
+  }
+
+  Future<void> init() async {
+    var data = await vm.getFaq(context);
+
+    setState(() {
+
+    });
   }
 
 }

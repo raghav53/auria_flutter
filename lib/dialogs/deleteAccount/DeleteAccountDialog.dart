@@ -5,22 +5,21 @@ import 'package:flutter/material.dart';
 
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
-import 'DeleteSaveChatVM.dart';
+import 'DeleteAccountVM.dart';
 
 
-class DeleteSaveChatDialog extends StatefulWidget {
+class DeleteAccountDialog extends StatefulWidget {
 
-  String id;
-  DeleteSaveChatDialog(this.id, {Key? key})
+  const DeleteAccountDialog( {Key? key})
       : super(key: key);
 
   @override
-  State<DeleteSaveChatDialog> createState() => _DeleteSaveChatDialog();
+  State<DeleteAccountDialog> createState() => _DeleteAccountDialog();
 }
 
-class _DeleteSaveChatDialog extends State<DeleteSaveChatDialog> {
+class _DeleteAccountDialog extends State<DeleteAccountDialog> {
 
-  var vm = DeleteSaveChatVM();
+  var vm = DeleteAccountVM();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _DeleteSaveChatDialog extends State<DeleteSaveChatDialog> {
               const SizedBox(height: 10,),
               Common.boldText(Strings.confirmation, 25, AppColor.textColor, TextAlign.center),
               const SizedBox(height: 10,),
-              Common.commonText(Strings.areYouSureYouWantToDeleteThisChat,15,AppColor.textColor,TextAlign.center),
+              Common.commonText(Strings.areYouSureYouWantToDeleteThisAccount,15,AppColor.textColor,TextAlign.center),
               const SizedBox(height: 20,),
               Container(
                 margin: const EdgeInsets.only(left: 20,right: 20),
@@ -78,7 +77,7 @@ class _DeleteSaveChatDialog extends State<DeleteSaveChatDialog> {
                       child: ElevatedButton(
                           onPressed: () {
                             showLoader(context);
-                            vm.yesClick(context,widget.id);
+                            vm.yesClick(context);
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: AppColor.greenColor, backgroundColor: AppColor.greenColor,

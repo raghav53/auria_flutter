@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:auria_ai/apis/common_model.dart';
 import 'package:auria_ai/screens/Chat/ChatModel.dart';
 import 'package:auria_ai/utils/all_keys.dart';
 import 'package:auria_ai/utils/color.dart';
+import 'package:auria_ai/utils/common.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../apis/api_controller.dart';
 import '../../utils/strings.dart';
@@ -28,10 +31,17 @@ class ChatVM with ChangeNotifier {
   int trialDaysLeft = 0;
   var errorMesasge = '';
   var selectedChatType = 0;
+  String lastQuestion = '';
 
   TextEditingController chatController = TextEditingController();
   ScrollController scrollController = ScrollController();
   TextEditingController saveChatTitleController = TextEditingController();
+
+   SpeechToText speechToText = SpeechToText();
+   bool speechEnabled = false;
+   String lastWords = '';
+   bool clickSpeech = false;
+
 
   List<LocalChatData> chatArray = [];
   late Timer timer;
@@ -39,7 +49,7 @@ class ChatVM with ChangeNotifier {
 
   void backClick(BuildContext context) {
     Navigator.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (context) => HomeScreen()), (
+        context, MaterialPageRoute(builder: (context) => const HomeScreen()), (
         route) => false);
   }
 
@@ -51,6 +61,24 @@ class ChatVM with ChangeNotifier {
     return ChatModel.fromJson(res);
   }
 
+
+  Future<void> saveChatThread(Map<String, String> map, BuildContext context) async {
+    if (chatArray.isNotEmpty) {
+      String response = await methodWithHeader("POST", AllKeys.saveChat, map, null, context);
+
+      var res = jsonDecode(response);
+
+      CommonModel commonModel = CommonModel.fromJson(res);
+
+      if(commonModel.code == 200){
+        Navigator.pop(context);
+        showToast(commonModel.message.toString());
+      }else{
+        showToast(commonModel.message.toString());
+      }
+
+    }
+  }
   showSaveDialog(BuildContext context) {
     showGeneralDialog(
         context: context,
@@ -76,7 +104,7 @@ class ChatVM with ChangeNotifier {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 40,),
+                  const SizedBox(height: 40,),
                   Material(
                     color: Colors.transparent,
                     child: Text('Save this chat?', style: TextStyle(
@@ -102,10 +130,10 @@ class ChatVM with ChangeNotifier {
                   Padding(
                       padding: const EdgeInsets.only(
                           left: 25.0, right: 25.0, bottom: 10, top: 10),
-                      child: Container(
+                      child: SizedBox(
                         width: double.infinity,
                         child: ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 50),
+                          constraints: const BoxConstraints(maxHeight: 50),
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
@@ -124,7 +152,7 @@ class ChatVM with ChangeNotifier {
                                       color: AppColor.textColor,
                                       fontWeight: FontWeight.w400),
                                   decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(
+                                      contentPadding: const EdgeInsets.only(
                                           top: 13, bottom: 5),
                                       hintText: 'Enter a Title...',
                                       hintStyle: TextStyle(
@@ -132,7 +160,7 @@ class ChatVM with ChangeNotifier {
                                           fontSize: 13,
                                           fontWeight: FontWeight.w400),
                                       border: InputBorder.none,
-                                      prefix: SizedBox(
+                                      prefix: const SizedBox(
                                         width: 15,
                                       ),
                                       suffixIcon: Padding(
@@ -152,7 +180,7 @@ class ChatVM with ChangeNotifier {
                           ),
                         ),
                       )),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Container(
                     margin: const EdgeInsets.only(left: 20, right: 20),
                     child: Row(
@@ -187,6 +215,37 @@ class ChatVM with ChangeNotifier {
                           width: 120,
                           child: ElevatedButton(
                               onPressed: () {
+                                if(chatArray.isEmpty){
+                                  showError("Chat box is empty");
+                                }else if(saveChatTitleController.text.toString().trim() == ""){
+                                  showError("Please enter chat title");
+                                }else{
+
+                                  // String json = jsonEncode(chatArray);
+                                  List<Map<String, String>> messageList = [];
+
+                                  for (var i = 0; i < chatArray.length; i++) {
+                                      Map<String, String> mapRate = <String, String>{};
+                                      mapRate['isFrom'] = chatArray[i].isFrom.toString();
+                                      mapRate['humanMesasge'] = chatArray[i].humanMesasge.toString();
+                                      mapRate['aiMessage'] = chatArray[i].aiMessage.toString();
+                                      mapRate['category'] = chatArray[i].category.toString();
+                                      mapRate['prompt'] = chatArray[i].prompt.toString();
+                                      mapRate['description'] = chatArray[i].description.toString();
+                                      mapRate['id'] = chatArray[i].id.toString();
+                                      messageList.add(mapRate);
+                                  }
+
+                                  String json = jsonEncode(messageList);
+
+                                  Map<String, String> map = {
+                                    "title":saveChatTitleController.text.toString().trim(),
+                                    "type":"0",
+                                    "json_data":json,
+                                  };
+
+                                  saveChatThread(map,context);
+                                }
 
                               },
                               style: ElevatedButton.styleFrom(
@@ -252,6 +311,8 @@ class LocalChatData {
   String humanMesasge = '';
   String aiMessage = '';
   String category = '';
+  String prompt = '';
+  String description = '';
   int? id = 0;
 
   LocalChatData({
@@ -259,6 +320,8 @@ class LocalChatData {
     required this.humanMesasge,
     required this.aiMessage,
     required this.category,
+    required this.prompt,
+    required this.description,
     this.id
   });
 }

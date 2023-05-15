@@ -38,7 +38,7 @@ class Strings{
   static var logOut = "Log Out";
   static var dashboard = "Dashboard";
   static var searchHere = "Search Here...";
-  static var freeTrialEnd = "Your Free Trial has\n ended on";
+  static var freeTrialEnd = "Your Free Trial will\n end on";
   static var freePlanEnd = "Your Plan has\n ended on";
   static var planEnd = "Your Plan \n ended on";
   static var category = "Category";
@@ -66,12 +66,14 @@ class Strings{
   static var areYouSureYouWantToLogout = "Are you sure want to logout ?";
   static var confirmation = "Confirmation";
   static var areYouSureYouWantToDeleteThisChat = "Are you sure you want to delete this chat?";
+  static var areYouSureYouWantToDeleteThisAccount = "Are you sure you want to delete this account?";
   static var changePassword = "Change Password";
   static var termCondition = "Terms & Conditions";
   static var privacyPolicy = "Privacy Policy";
   static var faqs = "FAQs";
   static var upgradeApp = "Upgrade App";
   static var shareApp = "Share App";
+  static var deleteAccount = "Delete Account";
   static var edit = "Edit";
   static var oldPassword = "Old Password";
   static var newPassword = "New Password";

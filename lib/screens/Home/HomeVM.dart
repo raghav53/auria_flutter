@@ -42,7 +42,7 @@ class HomeVM with ChangeNotifier{
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   void newChatClick(BuildContext context, String prompt, String description) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(prompt:prompt,description:description)));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(prompt:prompt,description:description,messageList: [])));
   }
 
   void saveChatClick(BuildContext context) {
