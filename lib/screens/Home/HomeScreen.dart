@@ -10,6 +10,7 @@ import '../../utils/strings.dart';
 import 'MainDrawer.dart';
 
 class HomeScreen extends StatefulWidget {
+
   static const String route = "HomeScreenRoute";
 
   const HomeScreen({Key? key}) : super(key: key);
@@ -61,10 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
 
     });
+
   }
 
   Future<void> init() async {
-    var categorys = await vm.getCategory(context);
+    var categorys = await vm.getCategory(context,"");
 
     if (categorys.body != null) {
       setState(() {
@@ -185,6 +187,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TextFormField(
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.text,
+                        onChanged: (text) async {
+
+                          if(text == ""){
+                            init();
+                          }else{
+                            var categorys = await vm.getCategory(context,text);
+
+                            if (categorys.body != null) {
+
+                              setState(() {
+
+                              });
+
+                            }
+                          }
+
+                        },
                         style: TextStyle(color: AppColor.fieldTextColor),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -200,18 +219,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(width: 7),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColor.whiteColor,
-                      border: Border.all(color: AppColor.whiteColor),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.only(
-                        top: 12, bottom: 10, left: 10, right: 12),
-                    child: Image.asset(
-                      "assets/images/send_message_icon.png",
-                      height: 30,
-                      width: 30,
+                  InkWell(
+                    onTap: (){
+                      hideKeyboard();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColor.whiteColor,
+                        border: Border.all(color: AppColor.whiteColor),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.only(
+                          top: 12, bottom: 10, left: 10, right: 12),
+                      child: Image.asset("assets/images/send_message_icon.png", height: 30, width: 30,),
                     ),
                   )
                 ],
@@ -254,7 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        bottomNavigationBar: (signUpModel.body!.subscription == 0) ? (isLoader == true)?
+        bottomNavigationBar:
+        (signUpModel.body!.subscription == 0) ?
+        (isLoader == true)?
         const SizedBox(
           height: 0,
         ):

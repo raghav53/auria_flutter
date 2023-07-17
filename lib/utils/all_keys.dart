@@ -14,7 +14,11 @@ class AllKeys{
   static var editProfile = "edit-profile";
   static var changePassword = "change-password";
   static var getFaqs = "get-faqs";
-  static var aiChat = "aiChat";
+  static var aiChat = "aiChatGpt4";
+
+  // Old URL---
+  // static var aiChat = "aiChat";
+
   static var getCategory = "get-category";
   static var subscription = "subscription";
   static var saveChat = "saveChat";

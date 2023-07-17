@@ -19,13 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
     vm.profile(context);
+
     vm.firebaseToken();
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
       body: Stack(
         children: [
           backgroundImage(context),
@@ -45,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ],
       ),
+
       bottomNavigationBar: Container(
         color: AppColor.greenColor,
         child: InkWell(
@@ -73,7 +79,9 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
       ),
+
     );
+
   }
 }
 

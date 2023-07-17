@@ -62,7 +62,6 @@ class WelcomeScreenVM with ChangeNotifier{
     }
   }
 
-
   Future<void> _appleSignIn(BuildContext context) async {
     try {
       platform.setMethodCallHandler((call) async {

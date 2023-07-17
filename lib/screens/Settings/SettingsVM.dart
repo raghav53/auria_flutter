@@ -73,8 +73,8 @@ class SettingsVM with ChangeNotifier {
     }
   }
   Future<void> androidLinkClick(BuildContext context) async {
-    if (await canLaunch('https://play.google.com/store/search?q=Auria%20ai&c=apps')) {
-      await launch('https://play.google.com/store/search?q=Auria%20ai&c=apps');
+    if (await canLaunch('https://play.google.com/store/apps/details?id=com.auria.ai')) {
+      await launch('https://play.google.com/store/apps/details?id=com.auria.ai');
     } else {
       throw 'Could not launch';
     }

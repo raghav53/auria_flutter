@@ -1,6 +1,8 @@
 import 'package:auria_ai/screens/SaveChat/SaveChatVM.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../apis/api_controller.dart';
 import '../../utils/color.dart';
 import '../../utils/common.dart';
 import '../../utils/strings.dart';
@@ -16,8 +18,31 @@ class SaveChatScreen extends StatefulWidget {
 
 class _SaveChatScreenState extends State<SaveChatScreen> {
 
-
   var vm = SaveChatVM();
+  BannerAd? bannerAd;
+  var isLoader = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    bannerAd = BannerAd(size: AdSize.banner,
+        adUnitId: "ca-app-pub-4774281274199118/6929879354",
+        listener: BannerAdListener(
+            onAdLoaded: (ad) {
+              setState(() {
+                isLoader = false;
+              });
+              print("Add Loaded");
+            },
+            onAdFailedToLoad: (ad,error){
+              ad.dispose();
+            }
+
+        ),
+        request: const AdRequest());
+    bannerAd!.load();
+  }
 
   @override
   void initState() {
@@ -60,83 +85,92 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
             },
           ),
         ),
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: AppColor.fieldColor, border: Border.all(color: AppColor.fieldColor), borderRadius: BorderRadius.circular(30)),
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: AppColor.fieldColor, border: Border.all(color: AppColor.fieldColor), borderRadius: BorderRadius.circular(30)),
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: TextFormField(
 
-                          cursorColor: Colors.black,
-                          keyboardType: TextInputType.text,
-                          controller: vm.search,
-                          onChanged: (text){
-                            if(text == ""){
-                              init();
-                            }
-                          },
-                          style: TextStyle(color: AppColor.fieldTextColor),
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                              hintText: Strings.searchHere,
-                              hintStyle: TextStyle(color: AppColor.fieldTextColor)),
-                        ),
+                        cursorColor: Colors.black,
+                        keyboardType: TextInputType.text,
+                        controller: vm.search,
+                        onChanged: (text){
+                          if(text == ""){
+                            init();
+                          }
+                        },
+                        style: TextStyle(color: AppColor.fieldTextColor),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                            hintText: Strings.searchHere,
+                            hintStyle: TextStyle(color: AppColor.fieldTextColor)),
                       ),
                     ),
-                    const SizedBox(width: 7),
-                    InkWell(
-                      onTap: () async {
+                  ),
+                  const SizedBox(width: 7),
+                  InkWell(
+                    onTap: () async {
 
-                        if(vm.search.text.trim().toString() == ""){
+                      if(vm.search.text.trim().toString() == ""){
 
-                        }else{
-                          var chat = await vm.getSavedChat(context,vm.search.text.trim().toString());
+                      }else{
+                        var chat = await vm.getSavedChat(context,vm.search.text.trim().toString());
 
-                          if (chat == true) {
-                            setState(() {
+                        if (chat == true) {
+                          setState(() {
 
-                            });
-                          }
+                          });
                         }
+                      }
 
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColor.whiteColor,
-                          border: Border.all(color: AppColor.whiteColor),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.only(top: 12, bottom: 10, left: 10, right: 12),
-                        child: Image.asset(
-                          "assets/images/send_message_icon.png",
-                          height: 30,
-                          width: 30,
-                        ),
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColor.whiteColor,
+                        border: Border.all(color: AppColor.whiteColor),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                    )
-                  ],
-                ),
+                      padding: const EdgeInsets.only(top: 12, bottom: 10, left: 10, right: 12),
+                      child: Image.asset(
+                        "assets/images/send_message_icon.png",
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Flexible(child: saveChatList())
-            ],
-          ),
+            ),
+            Flexible(child: saveChatList())
+          ],
         ),
-
+        bottomNavigationBar: (signUpModel.body!.subscription == 0) ? (isLoader == true)?
+        const SizedBox(
+          height: 0,
+        ):
+        Container(
+          color: AppColor.whiteColor,
+          height: 60,
+          child: AdWidget(ad: bannerAd!),
+        ):
+        const SizedBox(
+          height: 0,
+        ),
       ),
     );
 
@@ -162,6 +196,7 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
           itemBuilder: (context,index)
           {
             return InkWell(
+
               onTap: (){
                 List<Map<String, String>> messageList = [];
 
@@ -178,7 +213,9 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
                 }
 
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(prompt:vm.savedChatModel.body![index].jsonData![0].prompt.toString(),description:vm.savedChatModel.body![index].jsonData![0].description.toString(),messageList: messageList)));
+
               },
+
               child: Container(
                 margin: const EdgeInsets.only(top: 5,bottom: 5),
                 decoration: BoxDecoration(
@@ -208,8 +245,6 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
                               onTap: () async {
                                 var result = showSaveDialog(context,vm.savedChatModel.body![index].title.toString(),vm.savedChatModel.body![index].id.toString());
                                 if(result == true){
-
-
                                   var chat = await vm.getSavedChat(context,"");
                                   if (chat == true) {
                                     setState(() {
@@ -224,8 +259,6 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
                               onTap: () async {
                                 var result = await vm.deleteChat(context,vm.savedChatModel.body![index].id.toString());
                                 if(result == true){
-
-
                                   var chat = await vm.getSavedChat(context,"");
                                   if (chat == true) {
                                     setState(() {
@@ -257,7 +290,6 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
   showSaveDialog(BuildContext context, String title, String id) {
 
     vm.editTitle.text = title;
-
 
     showGeneralDialog(
         context: context,

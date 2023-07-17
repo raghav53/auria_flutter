@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:auria_ai/dialogs/message/MessageDialog.dart';
 import 'package:auria_ai/screens/Chat/ChatModel.dart';
@@ -102,23 +103,16 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {});
   }
 
-  /// Each time to start a speech recognition session
   void _startListening() async {
     await vm.speechToText.listen(onResult: _onSpeechResult);
     setState(() {});
   }
 
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
   void _stopListening() async {
     await vm.speechToText.stop();
     setState(() {});
   }
 
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       vm.lastWords = result.recognizedWords;
@@ -1354,7 +1348,7 @@ class _ChatScreenState extends State<ChatScreen> {
             isLast: (item.id == messages.last.id) ? true : false,
              vm: vm,
             regeratedTapped: (){
-              sendMessage();
+              makeSendAIChatRequest(vm.lastQuestion);
             },
           ),
         ));
@@ -1363,8 +1357,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return mArray;
   }
 
+  /*Future<void> sendMessage() async {
 
-  Future<void> sendMessage() async {
     if (vm.chatController.text.trim().isNotEmpty) {
 
       FocusManager.instance.primaryFocus?.unfocus();
@@ -1464,7 +1458,139 @@ class _ChatScreenState extends State<ChatScreen> {
       }
 
       getUserData();
+
     }
+
+  }*/
+
+  Future<void> sendMessage() async {
+    if (vm.chatController.text.trim().isNotEmpty) {
+      _stopListening();
+      FocusManager.instance.primaryFocus?.unfocus();
+      String message = '';
+      LocalChatData data = LocalChatData(
+          isFrom: 'human',
+          humanMesasge: vm.chatController.text,
+          aiMessage: '',
+          category: 'chat',
+          prompt: widget.prompt,
+          description: widget.description,
+          id: vm.chatId);
+      vm.chatArray.add(data);
+      message = vm.chatController.text;
+      vm.lastQuestion = message;
+      vm.chatController.text = '';
+      vm.lastWords = '';
+
+      await playSendTone();
+
+      makeSendAIChatRequest(message);
+    }
+  }
+
+
+  makeSendAIChatRequest(String message) async {
+    LocalChatData loaderData = LocalChatData(
+        isFrom: 'loader',
+        humanMesasge: message,
+        aiMessage: '',
+        category: 'chat',
+        prompt: widget.prompt,
+        description: widget.description,
+        id: vm.chatId);
+
+    vm.chatArray.add(loaderData);
+    setState(() {
+      vm.timer = Timer(const Duration(milliseconds: 200), () {
+        setState(() {
+          vm.scrollController.animateTo(vm.scrollController.position.maxScrollExtent,
+              duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+          vm.timer.cancel();
+        });
+      });
+    });
+
+    String apiMessage = '';
+    for (var aMsg  in vm.chatArray){
+      if (aMsg.isFrom == 'ai'){
+        apiMessage += '\\n\\nAuria:${aMsg.aiMessage}';
+      }else if (aMsg.isFrom == 'human'){
+        apiMessage += '\\n\\nHuman:${aMsg.humanMesasge}';
+      }
+    }
+    print("description_______________${widget.description}");
+    var model;
+    List<Map<String, dynamic>> map = [];
+    Map<String, dynamic> data1 = {};
+    Map<String, dynamic> data2 = {};
+    if (message == widget.description.toString()) {
+      // model = await vm.chatWithAI({'chat': dataMess}, context);
+      // model = await vm.chatWithAI({'chat': 'Human:$message\\n\\nAuria:'}, context);
+      data1 = {"role": "system","content": "My name is chandan. How can I assist you today?"};
+      data2 = {"role": "user","content": message};
+    } else {
+      data1 = {"role": "system","content": widget.prompt};
+      data2 = {"role": "user","content": message};
+      // model = await vm.chatWithAI({'chat': '${widget.prompt}\\n\\$dataMess'}, context);
+    }
+
+    map.add(data1);
+    map.add(data2);
+    var jsondecod = json.encode(map);
+    String dataMess = jsondecod;
+
+    model = await vm.chatWithAI({'chat': dataMess}, context);
+
+    if (!mounted) {
+      return;
+    }
+    vm.chatArray.removeLast();
+    if (model.success == 1) {
+      vm.errorMesasge = '';
+
+        await playReceiveTone();
+
+
+      debugPrint('Here i got');
+      LocalChatData aiData = LocalChatData(
+          isFrom: 'ai',
+          humanMesasge: message,
+          aiMessage: model.body?.choices?.first.text ?? '',
+          category: 'chat',
+          prompt: widget.prompt,
+          description: widget.description,
+          id: vm.chatId);
+
+      vm.chatId += 1;
+      vm.chatArray.add(aiData);
+      setState(() {
+        vm.timer = Timer(const Duration(milliseconds: 200), () {
+          setState(() {
+            vm.scrollController.animateTo(
+                vm.scrollController.position.maxScrollExtent,
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut);
+            vm.timer.cancel();
+          });
+
+        });
+
+
+      });
+    } else if ((model.code ?? 0) == 429) {
+      makeSendAIChatRequest(message);
+    } else {
+      if ((model.message ?? '') ==
+          'You have reached your daily word limit') {
+        vm.errorMesasge = '';
+      } else {
+        vm.errorMesasge = model.message ?? '';
+      }
+      setState(() {});
+      // Utility.shared.showToast('Error', model.message ?? '', context);
+    }
+    getUserData();
+
   }
 
 

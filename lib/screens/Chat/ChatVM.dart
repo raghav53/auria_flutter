@@ -55,8 +55,7 @@ class ChatVM with ChangeNotifier {
 
   Future<ChatModel> chatWithAI(Map<String, String> params,
       BuildContext context) async {
-    var response = await methodWithHeader(
-        "POST", AllKeys.aiChat, params, null, context);
+    var response = await methodWithHeader("POST", AllKeys.aiChat, params, null, context);
     var res = jsonDecode(response);
     return ChatModel.fromJson(res);
   }
