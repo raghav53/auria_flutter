@@ -1526,10 +1526,10 @@ class _ChatScreenState extends State<ChatScreen> {
     if (message == widget.description.toString()) {
       // model = await vm.chatWithAI({'chat': dataMess}, context);
       // model = await vm.chatWithAI({'chat': 'Human:$message\\n\\nAuria:'}, context);
-      data1 = {"role": "system","content": "My name is chandan. How can I assist you today?"};
+      data1 = {"role": "system","content": "My name is Auria. How can I assist you today?"};
       data2 = {"role": "user","content": message};
     } else {
-      data1 = {"role": "system","content": widget.prompt};
+      data1 = {"role": "system","content": "My name is auria .${widget.prompt}"};
       data2 = {"role": "user","content": message};
       // model = await vm.chatWithAI({'chat': '${widget.prompt}\\n\\$dataMess'}, context);
     }
