@@ -35,7 +35,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
 
   var vm = ChatVM();
-
+  List<Map<String, dynamic>> map = [];
 
   BannerAd? bannerAd;
   var isLoader = true;
@@ -80,6 +80,17 @@ class _ChatScreenState extends State<ChatScreen> {
             prompt: widget.messageList[i]["prompt"].toString(),
             description: widget.messageList[i]["description"].toString(),
             id: int.parse(widget.messageList[i]["id"].toString()));
+
+        Map<String, dynamic> dataHuman = {};
+        Map<String, dynamic> dataAi = {};
+        dataAi = {"role":"assistant","content": widget.messageList[i]["aiMessage"].toString()};
+        dataHuman = {"role": "user","content": widget.messageList[i]["humanMesasge"].toString()};
+
+        map.add(dataHuman);
+        if(widget.messageList[i]["aiMessage"].toString() != ""){
+          map.add(dataAi);
+        }
+
         vm.chatArray.add(aiData);
       }
 
@@ -1520,22 +1531,25 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     print("description_______________${widget.description}");
     var model;
-    List<Map<String, dynamic>> map = [];
+
     Map<String, dynamic> data1 = {};
-    Map<String, dynamic> data2 = {};
+    Map<String, dynamic> dataHuman = {};
+
     if (message == widget.description.toString()) {
       // model = await vm.chatWithAI({'chat': dataMess}, context);
       // model = await vm.chatWithAI({'chat': 'Human:$message\\n\\nAuria:'}, context);
       data1 = {"role": "system","content": "My name is Auria. How can I assist you today?"};
-      data2 = {"role": "user","content": message};
+      dataHuman = {"role": "user","content": message.trim()};
     } else {
       data1 = {"role": "system","content": "My name is auria .${widget.prompt}"};
-      data2 = {"role": "user","content": message};
+      dataHuman = {"role": "user","content": message.trim()};
       // model = await vm.chatWithAI({'chat': '${widget.prompt}\\n\\$dataMess'}, context);
     }
 
-    map.add(data1);
-    map.add(data2);
+    if(map.isEmpty){
+      map.add(data1);
+    }
+    map.add(dataHuman);
     var jsondecod = json.encode(map);
     String dataMess = jsondecod;
 
@@ -1549,17 +1563,11 @@ class _ChatScreenState extends State<ChatScreen> {
       vm.errorMesasge = '';
 
         await playReceiveTone();
-
-
+      Map<String, dynamic> dataAi = {};
+      dataAi = {"role":"assistant","content": model.body?.choices?.first.text ?? ''};
+      map.add(dataAi);
       debugPrint('Here i got');
-      LocalChatData aiData = LocalChatData(
-          isFrom: 'ai',
-          humanMesasge: message,
-          aiMessage: model.body?.choices?.first.text ?? '',
-          category: 'chat',
-          prompt: widget.prompt,
-          description: widget.description,
-          id: vm.chatId);
+      LocalChatData aiData = LocalChatData(isFrom: 'ai', humanMesasge: message, aiMessage: model.body?.choices?.first.text ?? '', category: 'chat', prompt: widget.prompt, description: widget.description, id: vm.chatId);
 
       vm.chatId += 1;
       vm.chatArray.add(aiData);
@@ -1635,34 +1643,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
     setState(() {});
-
-    /* if (vm.isExpired) {
-      await SubscriptionsProvider.instance
-          .restorePurchases((PurchaseDetails details) async {
-        var anyModel = await APIManager.shared.subscription({
-          'transaction_id': details.purchaseID ?? '',
-          'amount': ((details.productID == 'com.jarvis.monthly') ||
-              (details.productID == 'com_jarvis_monthly'))
-              ? '17.99'
-              : '4.99',
-          'type': ((details.productID == 'com.jarvis.monthly') ||
-              (details.productID == 'com_jarvis_monthly'))
-              ? '1'
-              : '0',
-          'json_data': details.verificationData.serverVerificationData
-        }, context);
-        if (!mounted) {
-          return;
-        }
-        if (anyModel.success == 1) {
-          getUserData();
-          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
-        } else {
-          print('${anyModel.message}');
-          //Utility.shared.showToast(AppConstants.appName, anyModel.message ?? '', context);
-        }
-      });
-    }*/
   }
 
 
