@@ -108,7 +108,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  /// This has to happen only once per app
   void _initSpeech() async {
     vm.speechEnabled = await vm.speechToText.initialize();
     setState(() {});
@@ -206,12 +205,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             vm.chatController.text = widget.description;
                             // vm.sendMessage();
                           }
-                        }, desc: widget.description)
-                    ] : getChatList(vm.chatArray),
+                        }, desc: widget.description)] : getChatList(vm.chatArray),
                   )),
 //FOR TRIAL USERS
-              if (vm.isSubscribed == 0 && vm.firstLogin &&
-                  vm.errorMesasge == '')
+              if (vm.isSubscribed == 0 && vm.firstLogin && vm.errorMesasge == '')
                 Padding(
                   padding:
                   const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
@@ -1479,14 +1476,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _stopListening();
       FocusManager.instance.primaryFocus?.unfocus();
       String message = '';
-      LocalChatData data = LocalChatData(
-          isFrom: 'human',
-          humanMesasge: vm.chatController.text,
-          aiMessage: '',
-          category: 'chat',
-          prompt: widget.prompt,
-          description: widget.description,
-          id: vm.chatId);
+      LocalChatData data = LocalChatData(isFrom: 'human', humanMesasge: vm.chatController.text, aiMessage: '', category: 'chat', prompt: widget.prompt, description: widget.description, id: vm.chatId);
       vm.chatArray.add(data);
       message = vm.chatController.text;
       vm.lastQuestion = message;

@@ -78,6 +78,7 @@ class ChatVM with ChangeNotifier {
 
     }
   }
+
   showSaveDialog(BuildContext context) {
     showGeneralDialog(
         context: context,
@@ -214,11 +215,16 @@ class ChatVM with ChangeNotifier {
                           width: 120,
                           child: ElevatedButton(
                               onPressed: () {
+
                                 if(chatArray.isEmpty){
                                   showError("Chat box is empty");
-                                }else if(saveChatTitleController.text.toString().trim() == ""){
+                                }
+
+                                else if(saveChatTitleController.text.toString().trim() == ""){
                                   showError("Please enter chat title");
-                                }else{
+                                }
+
+                                else{
 
                                   // String json = jsonEncode(chatArray);
                                   List<Map<String, String>> messageList = [];

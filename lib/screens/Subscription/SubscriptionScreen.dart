@@ -16,11 +16,13 @@ import '../../utils/strings.dart';
 import '../Home/HomeScreen.dart';
 
 class SubscriptionScreen extends StatefulWidget {
+
   static const String route = "SubscriptionScreenRoute";
   const SubscriptionScreen({Key? key}) : super(key: key);
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
@@ -64,7 +66,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           ),
         ),
 
-        body: (vm.productList.length != 0) ?Stack(
+        body: (vm.productList.length != 0)
+            ?Stack(
           children: [
             Container(
               alignment: Alignment.topRight,
@@ -87,7 +90,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               ],
             ),
           ],
-        ) : const Center(
+        )
+            : const Center(
           child: CircularProgressIndicator(),
         ),
 
@@ -103,14 +107,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               const SizedBox(height: 10,),
               InkWell(
                 onTap: () {
-                  if(vm.checkPlan == 0){
-                    showError("Please select plan");
-                  }else if(vm.checkPlan == 1){
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
-                  }else{
+
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>CardInfoScreen()));
                     performPayment(context);
-                  }
+
                 },
                 child: Container(
                   height: 45,
@@ -495,8 +495,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       if (vm.checkPlan == 2) {
-        var index = vm.productList.indexWhere((element) =>
-        element.id == vm.iWeeklyId);
+        var index = vm.productList.indexWhere((element) => element.id == vm.iWeeklyId);
         productToBuy = vm.productList.elementAt(index);
       } else if(vm.checkPlan == 3) {
         var index = vm.productList.indexWhere((element) =>
@@ -530,22 +529,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
       // var anyModel = await vm.subscription({'transaction_id':details.purchaseID ?? '','amount':productToBuy!.rawPrice.toString(),'type':(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",'json_data':details.verificationData.serverVerificationData}, context);
 
-      Map<String,String> map = {
-        "transaction_id":details.purchaseID.toString(),
-        "amount":productToBuy!.rawPrice.toString(),
-        "type":(vm.checkPlan == 2)?'0':(vm.checkPlan == 3)?'1':"2",
-        "json_data":details.verificationData.serverVerificationData,
-      };
-      String res = await methodWithHeader("POST", AllKeys.subscription, map, null, context);
-
-      var response = jsonDecode(res);
-
-      CommonModel commonModel = CommonModel.fromJson(response);
-      if (commonModel.success == 200){
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const HomeScreen()), (route) => false);
-      }else{
-        showToast(commonModel.message ?? '');
-      }
     });
 
   }

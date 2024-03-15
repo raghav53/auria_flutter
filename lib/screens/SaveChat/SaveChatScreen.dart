@@ -212,7 +212,10 @@ class _SaveChatScreenState extends State<SaveChatScreen> {
                   messageList.add(mapRate);
                 }
 
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(prompt:vm.savedChatModel.body![index].jsonData![0].prompt.toString(),description:vm.savedChatModel.body![index].jsonData![0].description.toString(),messageList: messageList)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(
+                    prompt:vm.savedChatModel.body![index].jsonData![0].prompt.toString(),
+                    description:vm.savedChatModel.body![index].jsonData![0].description.toString(),
+                    messageList: messageList)));
 
               },
 

@@ -41,7 +41,7 @@ class SettingsVM with ChangeNotifier {
 
   void changePassClick(BuildContext context) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
+        MaterialPageRoute(builder: (context) => const ChangePasswordScreen()));
   }
 
   Future<void> termsClick(BuildContext context) async {
